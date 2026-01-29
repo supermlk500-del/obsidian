@@ -1,0 +1,2 @@
+- **Axios** 是一个基于 **Promise** 的 **HTTP 客户端**，用于在 **node.js** 和 **浏览器** 中发送 HTTP 请求。它允许您从浏览器中发出 **XMLHttpRequests**，并从 node.js 发出 **http 请求**。Axios 是 **同构的**，这意味着您可以使用相同的代码在浏览器和服务器上运行。在服务器端，它使用 node.js 的原生 **http 模块**，而在客户端（浏览器）它使用 **XMLHttpRequests**。
+- Axios其实就像Ajax一样，用于异步请求，Ajax是Jquery的一个模块

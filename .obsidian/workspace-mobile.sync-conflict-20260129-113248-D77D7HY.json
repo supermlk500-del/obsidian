@@ -1,0 +1,171 @@
+{
+  "main": {
+    "id": "b76bdae6cbe95382",
+    "type": "split",
+    "children": [
+      {
+        "id": "aa7a4a3b2cca058b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1aec835888b96257",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "未命名.canvas",
+                "viewState": {
+                  "x": 0,
+                  "y": 0,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "未命名"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7c445c4d6372212c",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "f459f11d14f2e4cb",
+        "type": "leaf",
+        "state": {
+          "type": "file-explorer",
+          "state": {
+            "sortOrder": "alphabetical",
+            "autoReveal": false
+          },
+          "icon": "lucide-folder-closed",
+          "title": "文件列表"
+        }
+      },
+      {
+        "id": "8ff30e42e4731e9b",
+        "type": "leaf",
+        "state": {
+          "type": "search",
+          "state": {
+            "query": "",
+            "matchingCase": false,
+            "explainSearch": false,
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical"
+          },
+          "icon": "lucide-search",
+          "title": "搜索"
+        }
+      },
+      {
+        "id": "38093ab53b14c76b",
+        "type": "leaf",
+        "state": {
+          "type": "tag",
+          "state": {
+            "sortOrder": "frequency",
+            "useHierarchy": true,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-tags",
+          "title": "标签"
+        }
+      },
+      {
+        "id": "6c03b8f8bc9835f4",
+        "type": "leaf",
+        "state": {
+          "type": "bookmarks",
+          "state": {},
+          "icon": "lucide-bookmark",
+          "title": "书签"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "right": {
+    "id": "b6565a4bd06f9d81",
+    "type": "mobile-drawer",
+    "children": [
+      {
+        "id": "4e2acd539cb03fd0",
+        "type": "leaf",
+        "state": {
+          "type": "backlink",
+          "state": {
+            "file": "javaEE/笔记.md",
+            "collapseAll": false,
+            "extraContext": false,
+            "sortOrder": "alphabetical",
+            "showSearch": false,
+            "searchQuery": "",
+            "backlinkCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-coming-in",
+          "title": "反向链接"
+        }
+      },
+      {
+        "id": "81b07bd7dac6a7f9",
+        "type": "leaf",
+        "state": {
+          "type": "outgoing-link",
+          "state": {
+            "file": "Java/韩顺平java基础.md",
+            "linksCollapsed": false,
+            "unlinkedCollapsed": true
+          },
+          "icon": "links-going-out",
+          "title": "出链"
+        }
+      },
+      {
+        "id": "017c7308218d6d83",
+        "type": "leaf",
+        "state": {
+          "type": "outline",
+          "state": {
+            "file": "Java/韩顺平java基础.md",
+            "followCursor": false,
+            "showSearch": false,
+            "searchQuery": ""
+          },
+          "icon": "lucide-list",
+          "title": "大纲"
+        }
+      }
+    ],
+    "currentTab": 0
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "workspaces:管理工作区布局": false
+    }
+  },
+  "active": "1aec835888b96257",
+  "lastOpenFiles": [
+    "javaEE/笔记.md",
+    "未命名.canvas",
+    "javaEE/笔记.sync-conflict-20251207-114319-CGCRTS2.md",
+    "javaEE/笔记.sync-conflict-20251207-114352-CGCRTS2.md",
+    "Java/韩顺平java基础.md",
+    "Java/韩顺平java基础.sync-conflict-20251116-163203-CGCRTS2.md",
+    "javaEE/打包.md",
+    "Java/5（位运算）.md"
+  ]
+}
