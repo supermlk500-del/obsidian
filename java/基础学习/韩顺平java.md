@@ -3767,10 +3767,10 @@ public static void main(String[] args) throws Exception {
 
 ### 八、throws vs throw（别混了‼）
 
-| 关键字    | 作用         |
-| ------ | ---------- |
-| throws | 声明异常（方法上）  |
-| throw  | 手动抛异常（方法内） |
+| 关键字    | 作用         | 意义           | 位置    | 后面跟的东西 |
+| ------ | ---------- | ------------ | ----- | ------ |
+| throws | 声明异常（方法上）  | 异常处理的一种方式    | 方法声明处 | 异常类型   |
+| throw  | 手动抛异常（方法内） | 手动生成异常对象的关键字 | 异常对象  | 异常对象   |
 
 ### throw 示例：
 
@@ -3811,6 +3811,270 @@ if (age < 0) {
 ❌ 不区分 throw 和 throws
 
 ---
+
+
+## 自定义异常的两种方式（重点🔥）
+
+**当 Java 内置异常不能准确表达业务错误时，就需要自定义异常**
+
+### 方式一：继承 RuntimeException（推荐 ⭐）
+
+> **最常用、最灵活、真实项目首选**
+
+### 1️⃣ 定义异常类
+
+`public class AgeIllegalException extends RuntimeException {      public AgeIllegalException() {         super();     }      public AgeIllegalException(String message) {         super(message);     } }`
+
+---
+
+### 2️⃣ 使用异常（throw）
+
+`public class UserService {      public void register(int age) {         if (age < 0 || age > 150) {             throw new AgeIllegalException("年龄不合法：" + age);         }         System.out.println("注册成功");     } }`
+
+---
+
+### 3️⃣ 调用方处理（可选）
+
+`public class Test {     public static void main(String[] args) {         UserService service = new UserService();         try {             service.register(-1);         } catch (AgeIllegalException e) {             System.out.println(e.getMessage());         }     } }`
+
+📌 特点总结：
+
+- 不强制 try-catch
+    
+- 写代码不被异常“绑架”
+    
+- **企业项目最常见**
+    
+
+---
+
+### 方式二：继承 Exception（受检异常）
+
+> **强制调用者处理（较少用）**
+
+### 定义：
+
+`public class BalanceNotEnoughException extends Exception {     public BalanceNotEnoughException(String message) {         super(message);     } }`
+
+---
+
+### 使用（必须 throws）：
+
+`public void withdraw(double money) throws BalanceNotEnoughException {     if (money > balance) {         throw new BalanceNotEnoughException("余额不足");     } }`
+
+📌 特点：
+
+- 编译器强制处理
+    
+- 代码侵入性强
+    
+- **一般不推荐，除非强制流程控制**
+
+# 八大wapper类(包装)
+
+## 包装类
+
+| 基本数据类型  | 包装类           |
+| ------- | ------------- |
+| byte    | **Byte**      |
+| short   | **Short**     |
+| int     | **Integer**   |
+| long    | **Long**      |
+| float   | **Float**     |
+| double  | **Double**    |
+| char    | **Character** |
+| boolean | **Boolean**   |
+
+### 包装类和数据类型的转换
+1. jdk5前的手动装箱和拆箱方式，装箱：基本类型 -> 包装类型，反之为拆箱
+2. jdk5之后为自动的装箱和拆箱
+```java
+//装箱
+int n = 100;
+Integer integer = new Integer(n);
+Integer integer = Integer.valueof(n);
+//拆箱
+int i = integer.inValue();
+```
+
+
+## 包装类 → String
+
+### 方式一：`toString()`（推荐，最常用）
+
+```java
+Integer i = 100;
+String s = i.toString();
+```
+
+📌 说明
+
+- 所有包装类都继承自 `Object`
+    
+- 都重写了 `toString()` 方法
+    
+- **安全、直观、不容易出错**
+    
+
+---
+
+### 方式二：`String.valueOf()`（通用方式）
+
+```java
+Integer i = 100;
+String s = String.valueOf(i);
+```
+
+📌 说明
+
+- **任何类型都能转成 String**
+    
+- 如果参数是 `null`，返回 `"null"`（不会抛异常）
+    
+
+```java
+Integer i = null;
+System.out.println(String.valueOf(i)); // 输出 "null"
+```
+
+---
+
+### 方式三：`+ ""`（不推荐但常见）
+
+```java
+Integer i = 100;
+String s = i + "";
+```
+
+📌 说明
+
+- 底层仍然调用 `StringBuilder`
+    
+- **可读性差，不推荐在正式代码中使用**
+    
+
+---
+
+## String → 包装类（非常重要🔥）
+
+### 通用规则
+
+> **使用包装类的 `parseXxx()` 方法**
+
+---
+
+### 示例
+
+```java
+String s1 = "123";
+
+Integer i = Integer.parseInt(s1);
+Double d = Double.parseDouble(s1);
+Float f = Float.parseFloat(s1);
+Long l = Long.parseLong(s1);
+```
+
+📌 返回的是 **基本数据类型**
+
+---
+
+### String → 包装类对象
+
+```java
+String s = "100";
+Integer i = Integer.valueOf(s);
+```
+
+📌 区别总结：
+
+|方法|返回类型|
+|---|---|
+|`parseXxx()`|基本数据类型|
+|`valueOf()`|包装类对象|
+
+---
+
+## 包装类 ↔ 基本数据类型（补充完整）
+
+### 手动拆箱（jdk5 之前）
+
+```java
+Integer integer = new Integer(100);
+int n = integer.intValue();
+```
+
+---
+
+### 自动装箱 & 自动拆箱（jdk5 之后）
+
+```java
+int a = 10;
+Integer b = a;   // 自动装箱
+
+Integer c = 20;
+int d = c;       // 自动拆箱
+```
+
+📌 本质（面试必说）：
+
+```java
+Integer b = Integer.valueOf(a);
+int d = c.intValue();
+```
+
+---
+
+## ⚠️ 注意事项（你笔记里**一定要有**）
+
+### 1️⃣ 包装类可以为 null，基本类型不行
+
+```java
+Integer i = null;
+// int a = null; // 编译错误
+```
+
+---
+
+### 2️⃣ 拆箱时如果是 null，会抛异常
+
+```java
+Integer i = null;
+int a = i; // NullPointerException
+```
+
+---
+
+### 3️⃣ Integer 缓存机制（面试高频🔥）
+
+```java
+Integer a = 127;
+Integer b = 127;
+System.out.println(a == b); // true
+
+Integer c = 128;
+Integer d = 128;
+System.out.println(c == d); // false
+```
+
+📌 原因
+
+- `Integer` 对 `-128 ~ 127` 做了缓存
+    
+- `==` 比较的是 **地址**
+    
+- **包装类比较一律用 `equals()`**
+    
+
+## String
+- 用于保存字符串
+- 用双引号扣起来的字符序列
+- 使用Unicode字符编码，一个字符（不管是汉字还是字母）都是占两个字节
+- String实现了Serializable，说明String可以串行化，意味着可以在网络传输
+- String实现类Comparable接口，说明String对象可以比较
+- String有属性private final char value `[]`；用于存放字符串类型
+- value是一个final类型，不可以修改：即value不能指向新的地址，但是单个字符内容是可以变化的
+
+
 
 
 

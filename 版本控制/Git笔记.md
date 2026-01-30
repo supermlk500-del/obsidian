@@ -62,7 +62,7 @@ git remote -v
 ```
 ### 已经添加过仓库时，需要修改
 ```bash
-git remote set-url origin git@gitee.com:deer-superman_0/text.git
+git remote set-url origin git@gitee.com:用户名/仓库地址
 ```
 
 ### 推送
@@ -112,5 +112,11 @@ ssh -T git@gitee.com
 Hi xxx! You've successfully authenticated.
 ```
 ==至此已经可以正确推送==
+
+
+
+
+
+
 
 
