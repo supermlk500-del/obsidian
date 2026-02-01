@@ -1,3 +1,5 @@
 {
-  "theme": "moonstone"
+  "theme": "moonstone",
+  "cssTheme": "Minimal",
+  "showViewHeader": true
 }

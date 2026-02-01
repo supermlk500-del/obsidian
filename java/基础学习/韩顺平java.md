@@ -4065,7 +4065,7 @@ System.out.println(c == d); // false
 - **包装类比较一律用 `equals()`**
     
 
-## String
+# String
 - 用于保存字符串
 - 用双引号扣起来的字符序列
 - 使用Unicode字符编码，一个字符（不管是汉字还是字母）都是占两个字节
@@ -4073,6 +4073,589 @@ System.out.println(c == d); // false
 - String实现类Comparable接口，说明String对象可以比较
 - String有属性private final char value `[]`；用于存放字符串类型
 - value是一个final类型，不可以修改：即value不能指向新的地址，但是单个字符内容是可以变化的
+### 两种创建String对象的区别
+
+#### 一、直接赋值
+
+```java
+String s1 = "xxa";
+```
+
+##### 1️⃣ 创建过程
+
+- JVM **先去字符串常量池（String Constant Pool）里找**
+    
+- 如果池中 **已经有 `"xxa"`**  
+    👉 `s1` **直接指向已有对象**
+    
+- 如果 **没有**  
+    👉 在 **常量池中创建一个 `"xxa"` 对象**，`s1` 指向它
+    
+
+##### 2️⃣ 特点总结
+
+✅ **可能不创建新对象**                                              
+✅ **效率高，节省内存**  
+✅ **推荐使用**
+
+##### 3️⃣ 示意
+
+```java
+String s1 = "xxa";
+String s2 = "xxa";
+
+System.out.println(s1 == s2); // true
+```
+
+> 因为它们指向的是 **同一个常量池对象**
+
+---
+
+#### 二、调用构造器
+
+```java
+String s2 = new String("xxa");
+```
+
+##### 1️⃣ 创建过程（重点❗）
+
+这一步 **至少创建 1 个对象，最多 2 个**
+
+流程是：
+
+1. **先检查常量池**
+    
+    - 如果 `"xxa"` 不存在 → 在常量池中创建
+        
+2. **一定会在堆中 new 一个新的 String 对象**
+    
+    - 内容是 `"xxa"`
+        
+    - `s2` 指向 **堆中的新对象**
+        
+
+##### 2️⃣ 特点总结
+
+❌ **一定创建新对象（堆中）**  
+❌ **内存浪费、效率低**  
+❌ **一般不推荐**
+
+##### 3️⃣ 示意
+
+```java
+String s1 = "xxa";
+String s2 = new String("xxa");
+
+System.out.println(s1 == s2); // false
+```
+
+> 一个在 **常量池**，一个在 **堆**
+
+---
+
+#### 三、内存对比图（非常重要）
+
+##### ① 直接赋值
+
+```
+栈        常量池
+s1  ───▶  "xxa"
+s2  ───▶  "xxa"
+```
+
+##### ② new String
+
+```
+栈        堆              常量池
+s2 ───▶  new String("xxa") ───▶ "xxa"
+```
+
+---
+
+#### 四、对比总结表（建议背）
+
+|对比点|`String s = "xxa"`|`String s = new String("xxa")`|
+|---|---|---|
+|是否用常量池|✅ 是|✅ 是|
+|是否创建新对象|❌ 不一定|✅ 一定|
+|对象位置|常量池|堆|
+|内存占用|少|多|
+|`==` 比较|可能为 true|一定为 false|
+|推荐程度|⭐⭐⭐⭐⭐|⭐|
+```text
+┌──────────────┐
+│  栈 Stack     │
+│              │
+│  s ───────────────┐
+└──────────────┘     │
+                     ▼
+               ┌──────────────┐
+               │ 常量池         │
+               │ String Pool   │
+               │              │
+               │  "xxa"        │
+               └──────────────┘
+
+```
+
+```text
+┌──────────────┐
+│  栈 Stack     │
+│              │
+│  s ───────────────┐
+└──────────────┘     │
+                     ▼
+               ┌──────────────┐
+               │   堆 Heap     │
+               │              │
+               │ new String   │
+               │   value ───────┐
+               └──────────────┘ │
+                                 ▼
+                         ┌──────────────┐
+                         │ 常量池         │
+                         │ String Pool   │
+                         │              │
+                         │  "xxa"        │
+                         └──────────────┘
+
+```
+
+
+---
+
+## String的内存布局
+
+好，直接给你一张 **“一看就懂、面试也能复述”** 的  
+👉 **String 内存变化流程图（ASCII版）**  
+（完全按 JVM 真实逻辑来画）
+
+---
+
+### 一、`String s = "xxa"` 内存变化流程图
+
+```text
+┌──────────────┐
+│  栈 Stack     │
+│              │
+│  s ───────────────┐
+└──────────────┘     │
+                     ▼
+               ┌──────────────┐
+               │ 常量池         │
+               │ String Pool   │
+               │              │
+               │  "xxa"        │
+               └──────────────┘
+```
+
+#### 运行流程
+
+1️⃣ JVM 先去 **字符串常量池** 查找 `"xxa"`  
+2️⃣ 如果存在 → **直接复用**  
+3️⃣ 如果不存在 → **在常量池创建 `"xxa"`**  
+4️⃣ 栈中的 `s` 指向常量池对象
+
+✅ **最多只会有 1 个 `"xxa"` 对象**
+
+---
+
+### 二、`String s = new String("xxa")` 内存变化流程图（重点）
+
+```text
+┌──────────────┐
+│  栈 Stack     │
+│              │
+│  s ───────────────┐
+└──────────────┘     │
+                     ▼
+               ┌──────────────┐
+               │   堆 Heap     │
+               │              │
+               │ new String   │
+               │   value ───────┐
+               └──────────────┘ │
+                                 ▼
+                         ┌──────────────┐
+                         │ 常量池         │
+                         │ String Pool   │
+                         │              │
+                         │  "xxa"        │
+                         └──────────────┘
+```
+
+#### 运行流程（非常关键）
+
+1️⃣ JVM **先检查常量池** 是否有 `"xxa"`
+
+- 没有 → 创建 `"xxa"`（常量池）
+    
+- 有 → 直接用
+    
+
+2️⃣ **一定在堆中创建一个新的 String 对象**
+
+3️⃣ `s` 指向的是 **堆中的对象**，不是常量池
+
+⚠️ **至少 1 个对象，最多 2 个对象**
+
+---
+
+### 三、对比强化图（一眼区分）
+
+#### 情况一：直接赋值
+
+```java
+String a = "java";
+String b = "java";
+```
+
+```text
+a ─┐
+   ├──▶ "java"（常量池）
+b ─┘
+```
+
+`a == b → true`
+
+---
+
+#### 情况二：new String
+
+```java
+String a = "java";
+String b = new String("java");
+```
+
+```text
+a ─────▶ "java"（常量池）
+
+b ─────▶ new String("java")（堆）
+```
+
+`a == b → false`
+
+---
+
+
+# StringBuffer类
+- java.lang.StringBuffer 代表可变的字符序列,可以对字符串内容进行增删
+- 很多方法与string相同,但StringBuffer是可变长度的
+- StringBuffer是一个容器
+- 可以串行化
+- 直接父类AbstractStringBuilder有属性char`[]` value,不是final;该value数组存放字符串内容,引出存放在堆中的
+- StringBuffer是一个final类
+### 和String的区别
+1. String保存的是字符串常量,里面的值不能更改,每次String类的更新实际上就是更改地址;因为这里保存值的是 `private final char value[]`
+2. StringBuffer保存的是字符串变量,里面的值可以更改每次StringBuffer的更新实际上可以更新内容,不用每次更新地址效率更高;保存值得是 `char[] value` 放在堆中
+
+
+### 构造器
+
+1. StringBuffer():构造一个不带字符得字符串缓冲区,其初始容量为16个字符
+```java
+StringBuffer S = new StringBuffer();
+```
+2. StringBuffer(100),通过指定`char[]`大小
+```java
+StringBuffer S = new StringBuffer(100);
+```
+3. 通过一个String创建StringBuffer
+```java
+StringBuffer S = new StringBuffer("hello");
+```
+	1. 这里创建char`[]`大小是给的字符长度加上16
+	2. 先创建一个21长得char`[]`,然后通过append()初始化为hello
+
+### String和StringBuffer之间的转化
+####  String->StringBuffer
+
+1. 使用构造器,对String本身没有影响
+```java
+String S = "hello";
+StringBuffer Sb = new StringBuffer(s);
+```
+2. 直接使用Append加入到一个空的StringBuffer
+#### StringBuffer->String
+1. 使用StringBuffer提供的`toString`方法
+```java
+StringBuffer s = new StringBuffer("hello");
+String str = s.toString();
+```
+2. 使用String的构造器
+```java
+String str1 = new String(s);
+```
+
+
+# Math类
+- **常用方法**
+### 绝对值`abs`
+```java
+int abd = Math.abs(-99);
+```
+### 求幂`pow`
+```java
+double pow = Math.pow(2,4);//2的4次方
+```
+### 向上取整`ceil`
+- 返回`>=`该参数的最小整数
+```java
+double ceil = Math.ceil(-3.0001);
+```
+####  向下取整`floor`
+- 返回`<=`该参数的最大整数
+```java
+double floor = Math.floor(-3.0001);
+
+```
+#### 四舍五入`round`
+```java
+long round = Math.floor(-5,5);//6
+```
+#### 开方`sqrt`
+```java
+double sqrt = Math.sqrt(9);
+```
+#### 随机数`random`
+- 返回的是`0 <= x < 1`之间的一个小数
+```java
+double d = Math.random()
+```
+
+# Arrays类
+## toString方法
+- 直接使用toString显示数组(遍历数组)
+```java
+System.out.pringln(Arrays.toString())
+```
+## 排序`sort`
+- 数组是引用类型,通过sort排序后,会直接影响实参
+```java
+integer arr[] = [9,0,2,2,5];
+System.out.print(arr.sort);
+```
+- 这里是从小到大
+- sort重载的,可以通过传入一个接口Comparator来实现定制排序
+
+Java 中排序主要分为 **两种方式**：
+
+1. **自然排序**（Comparable）
+    
+2. **定制排序**（Comparator）
+    
+
+---
+
+### 二、自然排序（Comparable）
+
+#### 1️⃣ 概念
+
+- **类自己定义排序规则**
+    
+- 实现 `Comparable<T>` 接口
+    
+- 重写 `compareTo()` 方法
+    
+
+👉 **一个类只能有一种自然排序规则**
+
+---
+
+#### 2️⃣ 使用场景
+
+- 对象有**固定、唯一**的排序规则  
+    （如：按 id、按年龄）
+    
+
+---
+
+#### 3️⃣ 示例
+
+```java
+class Person implements Comparable<Person> {
+    String name;
+    int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public int compareTo(Person o) {
+        // 按年龄升序
+        return this.age - o.age;
+    }
+}
+```
+
+```java
+Person[] arr = {
+    new Person("张三", 20),
+    new Person("李四", 18)
+};
+
+Arrays.sort(arr);
+```
+
+---
+
+#### 4️⃣ compareTo 返回值规则
+
+|返回值|含义|
+|---|---|
+|`< 0`|当前对象在前|
+|`= 0`|相等|
+|`> 0`|当前对象在后|
+
+---
+
+### 三、定制排序（Comparator）⭐⭐⭐（重点）
+
+#### 1️⃣ 概念
+
+- **外部指定排序规则**
+    
+- 不修改原有类
+    
+- 一个类可以有 **多种排序方式**
+    
+
+👉 **面试 & 实战最常用**
+
+---
+
+#### 2️⃣ 核心方法
+
+```java
+int compare(T o1, T o2)
+```
+
+---
+
+#### 3️⃣ 基本示例（数组排序）
+
+```java
+Integer[] arr = {3, 1, 5, 2};
+
+Arrays.sort(arr, new Comparator<Integer>() {
+    @Override
+    public int compare(Integer o1, Integer o2) {
+        // 降序
+        return o2 - o1;
+    }
+});
+```
+
+---
+
+### 四、对象定制排序（多条件排序🔥）
+
+#### 示例需求
+
+👉 学生排序规则：
+
+1. 年龄升序
+    
+2. 年龄相同 → 成绩降序
+    
+
+---
+
+#### Student 类
+
+```java
+class Student {
+    String name;
+    int age;
+    double score;
+
+    public Student(String name, int age, double score) {
+        this.name = name;
+        this.age = age;
+        this.score = score;
+    }
+}
+```
+
+---
+
+#### Comparator 写法
+
+```java
+list.sort(new Comparator<Student>() {
+    @Override
+    public int compare(Student s1, Student s2) {
+        if (s1.age != s2.age) {
+            return s1.age - s2.age;   // 年龄升序
+        }
+        return Double.compare(s2.score, s1.score); // 成绩降序
+    }
+});
+```
+
+---
+
+### 五、Lambda 排序（Java 8+）
+
+```java
+list.sort((s1, s2) -> {
+    if (s1.age != s2.age) {
+        return s1.age - s2.age;
+    }
+    return Double.compare(s2.score, s1.score);
+});
+```
+
+---
+
+### 六、官方推荐 Comparator 写法（⭐⭐⭐⭐⭐）
+
+```java
+list.sort(
+    Comparator.comparingInt((Student s) -> s.age)
+              .thenComparing((s1, s2) -> Double.compare(s2.score, s1.score))
+);
+```
+
+### 优点
+
+- 可读性强
+    
+- 不容易写错
+    
+- 面试官非常喜欢
+    
+
+---
+
+### 七、Arrays.sort vs Collections.sort
+
+|方法|适用对象|
+|---|---|
+|`Arrays.sort()`|数组|
+|`Collections.sort()`|List|
+|`list.sort()`|Java 8 推荐|
+
+---
+
+## binarySearch
+- 通过二叉搜索法进行查找是否有一个数,要求必须排好序
+- 不存在就返回`return -(low + 1)` ;这个`low`表示的是要查找的数如果在数组内的话应该在什么位置
+```java
+int i = Array.binarySearch(arr,1);//返回的是下标
+```
+
+
+## System类
+
+
+
+
+
+
+
 
 
 
