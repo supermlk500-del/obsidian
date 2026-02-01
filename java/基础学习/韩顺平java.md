@@ -4648,12 +4648,349 @@ int i = Array.binarySearch(arr,1);//返回的是下标
 ```
 
 
-## System类
+
+## System 类（java.lang.System）
+
+System 类位于 **java.lang 包**下，使用时**不需要导包**，主要用于完成**与 JVM 和操作系统相关的功能**。
+
+特点说明：
+
+- System 是 **final 类**，不能被继承
+    
+- 构造方法是 **private**，不能创建对象
+    
+- 常用成员 **全部是 static**
+    
+- 属于 **系统级工具类**
+    
+
+---
+
+## 常用成员变量
+
+### System.out（标准输出流）
+
+```java
+System.out.println("Hello Java");
+System.out.print("Hello");
+```
+
+说明：
+
+- 类型是 `PrintStream`
+    
+- 默认输出到 **控制台**
+    
+- 用于输出正常信息
+    
+- 本质是 **标准输出流 stdout**
+    
+
+---
+
+### System.err（标准错误输出流）
+
+```java
+System.err.println("发生错误");
+```
+
+说明：
+
+- 类型同样是 `PrintStream`
+    
+- 也是输出到控制台
+    
+- 用于输出错误信息
+    
+- 本质是 **错误输出流 stderr**
+    
+
+实际项目中：
+
+- `System.out` → 普通日志
+    
+- `System.err` → 错误日志
+    
+
+---
+
+## 常用方法（核心）
+
+### exit —— 退出当前 JVM
+
+```java
+System.exit(0);
+```
+
+作用：
+
+- **立即终止 JVM**
+    
+- 后面的代码不会再执行
+    
+
+参数说明：
+
+- `0`：正常退出
+    
+- 非 0：异常退出（通常表示程序错误）
+    
+
+示例：
+
+```java
+System.out.println("程序开始");
+System.exit(0);
+System.out.println("这里不会执行");
+```
+
+补充理解：
+
+- `return`：退出方法
+    
+- `System.exit()`：退出整个 JVM
+    
+
+---
+
+### arraycopy —— 数组拷贝（底层高效）
+
+```java
+System.arraycopy(src, srcPos, dest, destPos, length);
+```
+
+参数含义：
+
+- `src`：源数组
+    
+- `srcPos`：源数组起始索引
+    
+- `dest`：目标数组
+    
+- `destPos`：目标数组起始索引
+    
+- `length`：拷贝元素个数
+    
+
+示例：
+
+```java
+int[] src = {1, 2, 3, 4, 5};
+int[] dest = new int[5];
+
+System.arraycopy(src, 0, dest, 0, src.length);
+
+for (int i : dest) {
+    System.out.println(i);
+}
+```
+
+特点说明：
+
+- 属于 **native 方法**
+    
+- 底层使用 C/C++ 实现
+    
+- 性能比 for 循环高
+    
+- 常用于 JDK 底层和性能敏感场景
+    
+
+注意事项：
+
+- 源数组和目标数组类型必须兼容
+    
+- 索引越界会抛异常
+    
+- 是 **浅拷贝**
+    
+
+---
+
+### currentTimeMillis —— 获取当前时间戳
+
+```java
+long time = System.currentTimeMillis();
+```
+
+说明：
+
+- 返回的是 **1970-01-01 00:00:00（UTC）到现在的毫秒数**
+    
+- 常用于：
+    
+    - 计算程序耗时
+        
+    - 生成时间戳
+        
+    - 简单性能测试
+        
+
+示例（计算代码执行时间）：
+
+```java
+long start = System.currentTimeMillis();
+
+for (int i = 0; i < 100000; i++) {
+    // 模拟耗时操作
+}
+
+long end = System.currentTimeMillis();
+System.out.println("耗时：" + (end - start) + "ms");
+```
+
+补充：
+
+- 精度是毫秒
+    
+- Java 8 以后推荐使用 `java.time` 包（如 `Instant`）
+    
+
+---
+
+### gc —— 建议 JVM 执行垃圾回收
+
+```java
+System.gc();
+```
+
+说明：
+
+- 只是 **向 JVM 发出建议**
+    
+- JVM **不一定立即执行 GC**
+    
+- 实际是否回收由 JVM 决定
+    
+
+特点：
+
+- 本质等价于 `Runtime.getRuntime().gc()`
+    
+- 一般不建议在业务代码中频繁调用
+    
+
+补充理解：
+
+- GC 是否执行
+    
+- GC 何时执行
+    
+- GC 回收多少  
+    👉 **全部由 JVM 控制**
+    
+
+---
+
+## System 类使用场景总结
+
+- 程序退出控制 → `System.exit`
+    
+- 高效数组复制 → `System.arraycopy`
+    
+- 性能计时 / 时间戳 → `System.currentTimeMillis`
+    
+- 调试或测试 GC → `System.gc`
+    
+- 控制台输出 → `System.out / System.err`
+    
+
+---
+
+## 面试常见问法补充
+
+- System 能不能 new？  
+    → 不能，构造器是 private
+    
+- `arraycopy` 和 for 循环区别？  
+    → native 方法，性能更高
+    
+- `System.exit` 和 return 区别？  
+    → exit 退出 JVM，return 只退出方法
+    
+- `System.gc()` 一定会 GC 吗？  
+    → 不一定，只是建议
+    
 
 
+# 集合（Collection Framework）
+
+- 可以动态保存任意多个对象，使用方便
+    
+- 提供了一系列操作对象的方法（增、删、改、查等）
+    
+- 使用集合进行添加、删除等操作，不需要关心数组长度
+    
+**集合主要是两组（单列集合：存值。双列集合：存键值对）**
+
+---
+
+## Collection（单列集合）
+- collenction实现子类可以存放多个元素,每个元素可以是Object
+- 有些collection的实现类,可以存放重复的元素
+- 有些collection的实现类,有些是有序的
+- collection接口没有直接的实现子类,是通过它的子接口Set和List来实现的
+### 常用类(使用ArrayList演示)
+1. `add`添加单个元素
+```java
+List list = new ArrayList();
+list.add("jack");
+list.add(10);
+list.add(true);
+```
+2. `remove`删除单个元素
+```java
+list.remove(0);//删除第一个元素
+list.remove("jack");//指定元素
+```
+3. `contains`查找元素是否存在
+```java
+list.contains("jack");//返回布尔值
+```
+4. `size`获取元素个数
+5. `isEmpty`判断是否为空
+6. `clear`清空元素
+7. `addAll`添加多个元素
+```java
+//一个新ArrayList
+ArrayList list2 = new ArrsyList();
+list2.add("xxa");
+list2.add("xxb");
+list.addAll(list2);
+```
+8. `contains`查找多个元素;使用和`7`类似
 
 
+### List（有序、可重复）
 
+- ArrayList
+
+- LinkedList
+
+- Vector
+
+
+---
+
+### Set（无序、不可重复）
+
+- HashSet
+    
+- TreeSet
+    
+
+---
+
+## Map（双列集合）
+
+### HashMap
+#### `LinkedHashMap`
+
+### TreeMap
+
+### Hashtable
+
+### Properties
 
 
 
