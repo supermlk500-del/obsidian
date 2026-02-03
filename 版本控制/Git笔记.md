@@ -450,4 +450,8 @@ git branch -D dev
 git push origin --delete dev
 ```
 
-
+## 更新
+```bash
+git pull
+git pull gitee main
+```
