@@ -1,6 +1,15 @@
+# Python 数据结构与算法整理
+
+本文档整理了Python中常见的数据结构与算法，旨在提供清晰的解释和代码示例。
+
 ## 变位词的算法
-### 逐字检查法
-从一个字符的第一位开始与第二个字符比较 一旦比较成功就把第二个字符的副本标记为none 之后的比较就不用重复比较了
+
+变位词（Anagram）是指通过重新排列字母，由一个单词或短语变换而成的另一个单词或短语。例如，“listen”和“silent”就是一对变位词。判断两个字符串是否为变位词是常见的算法问题，以下介绍几种解决方案。
+
+### 1. 逐字检查法
+
+这种方法通过遍历第一个字符串的每个字符，然后在第二个字符串中查找匹配的字符。如果找到，则将第二个字符串中的对应字符标记为已使用，以避免重复匹配。如果第一个字符串的所有字符都能在第二个字符串中找到唯一匹配，则它们是变位词。
+
 ```python
 def anagramsolution(s1,s2):  
     alist=list(s2)#复制s2到列表  
@@ -21,22 +30,25 @@ def anagramsolution(s1,s2):
         pos1+=1  
     return stilok  
 print(anagramsolution("abcd","dcba"))  
-  
 ```
-### 暴力法 
 
-也就是暴力枚举 把每一种情况都列举出来 一般不推荐使用
-### 计数比较
-变位词的比较可以转换为两个字符的字母数量出现的次数
+### 2. 暴力法
+
+暴力法通常指枚举所有可能的排列组合，然后与另一个字符串进行比较。这种方法在实际应用中效率极低，因为字符串的排列组合数量会随着长度的增加呈指数级增长，因此**不推荐使用**。
+
+### 3. 计数比较法
+
+如果两个字符串是变位词，那么它们包含的每个字符的数量都应该相同。这种方法通过统计两个字符串中每个字符出现的次数，然后比较两个统计结果是否一致来判断。对于只包含小写字母的字符串，可以使用一个长度为26的数组来存储每个字母的计数。
+
 ```python
 def anagramsoltionss(s1,s2):  
     c1=[0]*26  
     c2=[0]*26  
     for i in range (len(s1)):  
-        pos=ord(s1[i]) - ord('a')#ord函数可以返回unicode编码的大小 然后减去开始的a的大小就可以把字母编程0到25之间的整数  但是这里仅仅支持小写字母
+        pos=ord(s1[i]) - ord(\'a\')#ord函数可以返回unicode编码的大小 然后减去开始的a的大小就可以把字母编程0到25之间的整数  但是这里仅仅支持小写字母
         c1[pos]+=1#比如b表示应该为1所以c1[1]出现两次值就加一  
     for i in range (len(s2)):  
-        pos=ord(s2[i]) - ord('a')  
+        pos=ord(s2[i]) - ord(\'a\')  
         c2[pos]+=1  
     j=0  
     stillok=True  
@@ -48,8 +60,11 @@ def anagramsoltionss(s1,s2):
     return stillok  
 print(anagramsoltionss("abcd","dcba"))
 ```
-### 排序比较法
-python中有特殊的排序函数可以让字符按照字母表排序
+
+### 4. 排序比较法
+
+如果两个字符串是变位词，那么将它们各自的字符排序后，得到的字符串应该完全相同。Python提供了方便的排序函数，使得这种方法实现起来非常简洁。
+
 ```python
 def anagramsoltions(s1,s2):  
     alist1=list(s1)  
@@ -68,25 +83,34 @@ def anagramsoltions(s1,s2):
 print(anagramsoltions("abcd","dcba"))
 ```
 
-python[[python官方对算法复杂的网站]](https://wiki.python.org/moin/TimeComplexity)
-* 扩展[[timeit模块]]这是一个可以让某一段语句运行多次的模块
+更多关于Python算法复杂度的信息，可以参考 [Python官方对算法复杂度的网站](https://wiki.python.org/moin/TimeComplexity)。
+
+此外，可以使用 `timeit` 模块来测量代码执行时间，这是一个可以重复运行某段语句并测量其性能的模块。
+
 ## 线性结构
 
-*  定义：线性结构是一种有序数据项的集合，其中每个数据项都有唯一的前驱和后继（除了第一个和最后一个）
-* 不同线性结构的关键区别在于数据项增减的方式
-#### 栈Stack
-* 一种有次序的数据项集合，在栈中，数据项的加入和一处都仅发生在同一端。这端就叫做栈顶*
-* 这种次序通常称为“后进先出LIFO”时间越短的离栈顶越近或反之
-1. 特性：反转次序。比如浏览器的回退按钮
-2. 栈的操作：
-	* stack()：创建一个空栈，不包含任何数据项
-	* push(item)：将item加入栈顶，无返回值
-	* pop()：将栈顶数据项移除，并返回，栈被修改
-	* peek()：“窥视栈顶数据项，返回栈顶的数据项但不移除，栈不被修改”
-	* isEmpty()：返回栈是否为空栈
-	* size()：返回栈中有多少个数据项
-3. 这里有使用列表来实现栈的内容
-	```python
+**线性结构**是一种有序数据项的集合，其中每个数据项都有唯一的前驱和后继（除了第一个和最后一个）。不同线性结构的关键区别在于数据项增减的方式。
+
+### 1. 栈（Stack）
+
+**栈**是一种有次序的数据项集合，在栈中，数据项的加入和移除都仅发生在同一端，这端被称为**栈顶**。这种次序通常称为“后进先出”（LIFO - Last In, First Out），即最后进入栈的数据项最先被移除。
+
+**特性与应用：**
+
+*   **反转次序**：栈的一个主要特性是能够反转数据项的次序，例如浏览器的回退按钮功能就类似于栈的操作。
+
+**栈的操作：**
+
+*   `Stack()`：创建一个空栈，不包含任何数据项。
+*   `push(item)`：将 `item` 加入栈顶，无返回值。
+*   `pop()`：将栈顶数据项移除，并返回该数据项，栈被修改。
+*   `peek()`：“窥视”栈顶数据项，返回栈顶的数据项但不移除，栈不被修改。
+*   `isEmpty()`：返回栈是否为空栈，返回布尔值。
+*   `size()`：返回栈中数据项的个数。
+
+**使用列表实现栈：**
+
+```python
 class Stack:  
     def __init__(self):  
         self.items = []  
@@ -95,11 +119,16 @@ class Stack:
         self.items.append(item)  
   
     def pop(self):  
-        return self.items.pop()  
+        if not self.isEmpty():
+            return self.items.pop()  
+        else:
+            return None # 或者抛出异常，表示栈为空
   
     def peek(self):  
         if not self.isEmpty():  
             return self.items[-1]  # 更简洁的写法  
+        else:
+            return None # 或者抛出异常，表示栈为空
   
     def size(self):  
         return len(self.items)  
@@ -107,10 +136,15 @@ class Stack:
     def isEmpty(self):  
         return self.size() == 0  # 修正：调用size()方法 
 ```
-4. 栈的应用：
-	1.   简单括号匹配
+
+**栈的应用示例：**
+
+#### 1.1 简单括号匹配
+
+此应用通过栈来检查表达式中的括号是否正确匹配。当遇到左括号时入栈，遇到右括号时出栈并检查是否与栈顶的左括号匹配。如果栈为空或不匹配，则括号不平衡。
+
 ```python
-	class Stack:  
+class Stack:  
     def __init__(self):  
         self.items = []  
   
@@ -118,11 +152,16 @@ class Stack:
         self.items.append(item)  
   
     def pop(self):  
-        return self.items.pop()  
+        if not self.isEmpty():
+            return self.items.pop()  
+        else:
+            return None
   
     def peek(self):  
         if not self.isEmpty():  
-            return self.items[-1]  # 更简洁的写法  
+            return self.items[-1]  
+        else:
+            return None
   
     def size(self):  
         return len(self.items)  
@@ -166,10 +205,11 @@ print(parChecker("())"))  # False (缺少左括号)
 print(parChecker("(a)"))  # True (忽略非括号字符)  
 print(parChecker("({})"))  # False (不处理其他括号类型)
 ```
-	*思考能不能从中间来判断？*
-	2. 十进制转换为二进制
-		a. 注意十进制转换成二进制本质上就是十进制数除以二的余数来作为栈底数据项
-		b. 具体代码如下
+
+#### 1.2 十进制转换为二进制
+
+十进制数转换为二进制的本质是不断除以2取余数，然后将余数逆序排列。栈的LIFO特性非常适合存储这些余数，并在最后按正确顺序弹出。
+
 ```python
 def divideby(decNumer):  
     if decNumer == 0:  
@@ -190,14 +230,22 @@ def divideby(decNumer):
     return binString  
 print(divideby(233))
 ```
-[[表达式]]
-[前中后缀表达式的具体使用](https://blog.csdn.net/qq_75021272/article/details/147772929?ops_request_misc=%257B%2522request%255Fid%2522%253A%252238527244b5104a42049321d44b1c6b07%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=38527244b5104a42049321d44b1c6b07&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-147772929-null-null.142^v102^pc_search_result_base1&utm_term=%E5%89%8D%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F&spm=1018.2226.3001.4187)
-*注意前后缀表达式其实都可以使用中缀表达式转换即==把符号转移到左，右括号的前面或者后面的位置==*
-2. 通用的中缀转后缀算法
-	1. 在中缀表达式转换为后缀形式的处理过程中，操作符比操作数要晚输出——所以在扫描到对应的第二个操作数之前，需要把操作符先保存起来
-	2. 而这些暂存的操作符，由于优先级的规则，==还有可能要反转次序输出——这种反转特性，是的我们考虑用栈来保存暂时为处理的操作符==
+
+#### 1.3 表达式转换与求值
+
+表达式有前缀、中缀和后缀三种表示形式。中缀表达式是我们日常使用的形式，而前缀和后缀表达式在计算机处理中更为方便。栈在这些表达式的转换和求值中扮演着关键角色。
+
+*   **表达式**：关于表达式的更多信息，请参考 [前中后缀表达式的具体使用](https://blog.csdn.net/qq_75021272/article/details/147772929?ops_request_misc=%257B%2522request%255Fid%2522%253A%252238527244b5104a42049321d44b1c6b07%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=38527244b5104a42049321d44b1c6b07&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-147772929-null-null.142^v102^pc_search_result_base1&utm_term=%E5%89%8D%E7%BC%80%E8%A1%A8%E8%BE%BE%E5%BC%8F&spm=1018.2226.3001.4187)。
+
+**注意**：前后缀表达式都可以通过将符号转移到左、右括号的前面或者后面的位置，从中缀表达式转换而来。
+
+##### 1.3.1 通用的中缀转后缀算法
+
+在中缀表达式转换为后缀形式的过程中，操作符比操作数要晚输出，因此需要将操作符暂存起来。由于优先级的规则，这些暂存的操作符可能需要反转次序输出，这正是栈的LIFO特性所擅长的。
+
 ```python
-from ListStack import Stack  
+# 假设 ListStack 模块中包含 Stack 类，这里为了代码独立性，直接使用上面定义的 Stack 类
+# from ListStack import Stack  
   
   
 def infixToPostfix(infixexpr):  
@@ -208,19 +256,49 @@ def infixToPostfix(infixexpr):
     prec['+'] = 2  
     prec['-'] = 2  
     prec['('] = 1  
-  
+
+    # 使用上面定义的 Stack 类
+    class Stack:  
+        def __init__(self):  
+            self.items = []  
+      
+        def push(self, item):  
+            self.items.append(item)  
+      
+        def pop(self):  
+            if not self.isEmpty():
+                return self.items.pop()  
+            else:
+                return None
+      
+        def peek(self):  
+            if not self.isEmpty():  
+                return self.items[-1]  
+            else:
+                return None
+      
+        def size(self):  
+            return len(self.items)  
+      
+        def isEmpty(self):  
+            return self.size() == 0  
+
     # 预处理：在运算符和括号前后添加空格  
-    infixexpr = infixexpr.replace('(', ' ( ').replace(')', ' ) ')  
-    infixexpr = infixexpr.replace('+', ' + ').replace('-', ' - ')  
-    infixexpr = infixexpr.replace('*', ' * ').replace('/', ' / ')  
-  
-    # 初始化数据结构  
+    # 原始代码中的替换方式可能导致多余空格或问题，这里进行优化
+    # 确保操作符和括号与操作数之间有空格，以便正确分割
+    temp_expr = ""
+    for char in infixexpr:
+        if char in "+-*/()":
+            temp_expr += " " + char + " "
+        else:
+            temp_expr += char
+    
+    # 再次处理，去除多余空格并分割
+    tokenList = [token for token in temp_expr.split() if token]
+
     opStack = Stack()  
     postfixList = []  
-  
-    # 分割并过滤空字符串  
-    tokenList = [token for token in infixexpr.split() if token]  
-  
+      
     for token in tokenList:  
         # 操作数判断（支持字母、数字及其组合）  
         if token.isalnum():  
@@ -237,11 +315,11 @@ def infixToPostfix(infixexpr):
                     (prec.get(opStack.peek(), 0) >= prec.get(token, 0)):  
                 postfixList.append(opStack.pop())  
             opStack.push(token)  
-  
+      
     # 弹出剩余运算符  
     while not opStack.isEmpty():  
         postfixList.append(opStack.pop())  
-  
+      
     return ' '.join(postfixList)  
   
   
@@ -249,99 +327,192 @@ def infixToPostfix(infixexpr):
 print(infixToPostfix("(A*B)+(B*C)"))  # 输出: "A B * B C * +"  
 print(infixToPostfix("A+B*C-D/E"))  # 输出: "A B C * + D E / -"
 ```
-		3.后置表达式求值 
-			* 注意"split()`函数要求输入字符串用空格分隔，但示例输入`"12*12*+"`没有空格分隔符，导致整个字符串被当作单个元素处理。"*
+
+##### 1.3.2 后缀表达式求值
+
+后缀表达式求值时，遇到操作数就入栈，遇到操作符就从栈中弹出两个操作数进行运算，然后将结果入栈。最终栈中剩下的就是表达式的值。
+
+**注意**：原始代码中的 `output("12*12*+")` 示例输入没有空格分隔符，导致 `split()` 函数无法正确处理。后缀表达式的每个操作数和操作符之间通常需要用空格分隔。
+
 ```python
-from ListStack import Stack  
+# 假设 ListStack 模块中包含 Stack 类，这里为了代码独立性，直接使用上面定义的 Stack 类
+# from ListStack import Stack  
   
+class Stack:  
+    def __init__(self):  
+        self.items = []  
   
+    def push(self, item):  
+        self.items.append(item)  
+  
+    def pop(self):  
+        if not self.isEmpty():
+            return self.items.pop()  
+        else:
+            return None
+  
+    def peek(self):  
+        if not self.isEmpty():  
+            return self.items[-1]  
+        else:
+            return None
+  
+    def size(self):  
+        return len(self.items)  
+  
+    def isEmpty(self):  
+        return self.size() == 0  
+
 def domath(token,x,y):  
     if token=='*':  
         return x*y  
     elif token=='/':  
-        return x/y  
+        return y/x  # 注意除法顺序，y是被除数，x是除数
     elif token=='+':  
         return x+y  
     elif token=='-':  
-        return x-y  
-  
-def output(outexpr):  
+        return y-x  # 注意减法顺序，y是被减数，x是减数
+
+# 修正后的 output 函数，处理带空格的后缀表达式
+def postfixEval(postfixExpr):  
     operandStack = Stack() #再存操作数  
-    for token in outexpr:  
-        if token in "0123456789":  
+    tokenList = postfixExpr.split() # 假设输入是空格分隔的
+
+    for token in tokenList:  
+        if token.isdigit(): # 判断是否为数字
             operandStack.push(int(token))  
         else :  
-            x=operandStack.pop()  
-            y=operandStack.pop()  
-            result=domath(token,x,y)  
+            op2=operandStack.pop()  
+            op1=operandStack.pop()  
+            result=domath(token,op1,op2)  
             operandStack.push(result)  
     return operandStack.pop()  
   
-print(output("12*12*+"))
+# 修正测试用例，使用空格分隔的后缀表达式
+print(postfixEval("1 2 * 1 2 * +")) # 对应 (1*2)+(1*2) = 4
+print(postfixEval("7 8 + 3 2 + /")) # 对应 (7+8)/(3+2) = 15/5 = 3
 ```
-#### 队列 Queue
-1. 是一种有次序的数据集合
-	1. 新数据项的添加总发生在一端（通常为“尾rear”端）
-		1. 而现存数据项的移除总发生在另一端（通常为“首front”端）
-	2. 当数据项加入队列，首先出现在队尾，随着队首数据项的移除，它逐渐接近队首 
-		- 新加入的数据项必须在数据集末尾等待，而等待时间最长的数据项则是队首
-		- 这种次序安排的原则称为先进先出
-		- 排队就是例子
-		- 队列仅有一个入口和出口——注意不允许数据项直接插入队中，也不允许从中间移除   
-2. 操作定义
-	1. Queue()：创建一个空队列对象，返回值为Queue对象
-	2. enqueue(item)：将数据项item添加到队尾，无返回值
-	3. dequeue：从队首移除数据项，返回值为队首数据项，队列被修改
-	4. isEmpty：测试是否空队列，返回值为布尔值
-	5. size：返回队列中的数据项的个数
-3. c采用LIst来实现ADT Queue
+
+### 2. 队列（Queue）
+
+**队列**是一种有次序的数据集合，新数据项的添加总发生在一端（通常为**队尾**），而现存数据项的移除总发生在另一端（通常为**队首**）。当数据项加入队列时，首先出现在队尾，随着队首数据项的移除，它逐渐接近队首。这种次序安排的原则称为**先进先出**（FIFO - First In, First Out），就像排队一样。
+
+**关键特点：**
+
+*   队列仅有一个入口和出口，不允许数据项直接插入队中，也不允许从中间移除。
+
+**队列的操作：**
+
+*   `Queue()`：创建一个空队列对象，返回值为 `Queue` 对象。
+*   `enqueue(item)`：将数据项 `item` 添加到队尾，无返回值。
+*   `dequeue()`：从队首移除数据项，返回值为队首数据项，队列被修改。
+*   `isEmpty()`：测试是否空队列，返回值为布尔值。
+*   `size()`：返回队列中的数据项的个数。
+
+**使用列表实现队列：**
+
 ```python
 class Queue:  
-    def __init__(self):  
-        self.queue = []  
+    def __init__(self):
+        self.items = []  
+
     def enqueue(self, item):  
-        self.queue.append(item)  
+        self.items.insert(0, item) # 在列表头部插入，作为队尾
+
     def dequeue(self):  
-        return self.queue.pop()  
+        if not self.isEmpty():
+            return self.items.pop() # 从列表尾部移除，作为队首
+        else:
+            return None
+
     def size(self):  
-        return len(self.queue)  
+        return len(self.items)  
+
     def isEmpty(self):  
-        return self.size == []
+        return self.items == []
 ```
-4. 热土豆问题
-	1. 按照传递方向从队首传到队尾：队首哪个人始终拥有土豆
-	2. 只需要加航队首的人出队，随机在到队尾入队，算是土豆的一次传递：传递num次后，将队首的人移除，不在入队，反复下去知道队列中只剩1人
+
+**队列的应用示例：**
+
+#### 2.1 热土豆问题（Hot Potato）
+
+热土豆游戏是一个经典的队列应用。孩子们围成一圈传递土豆，当计时器停止时，拿着土豆的孩子被淘汰。这个过程重复进行，直到只剩下一个孩子。队列可以模拟这种传递和淘汰的过程。
+
 ```python
-from ListQueue import Queue  
+# 假设 ListQueue 模块中包含 Queue 类，这里为了代码独立性，直接使用上面定义的 Queue 类
+# from ListQueue import Queue  
   
-  
+class Queue:  
+    def __init__(self):
+        self.items = []  
+
+    def enqueue(self, item):  
+        self.items.insert(0, item) # 在列表头部插入，作为队尾
+
+    def dequeue(self):  
+        if not self.isEmpty():
+            return self.items.pop() # 从列表尾部移除，作为队首
+        else:
+            return None
+
+    def size(self):  
+        return len(self.items)  
+
+    def isEmpty(self):  
+        return self.items == []
+
 def hotPotato(names,num):  
     simqueue = Queue()  
-    #初始化队列把所有名字加入到队列中去  
+    # 初始化队列，把所有名字加入到队列中去  
     for name in names:  
         simqueue.enqueue(name)  
-        while simqueue.size() > 1:  
-            for i in range(num):  
-                simqueue.enqueue(simqueue.dequeue())  
-            simqueue.dequeue()#淘汰在队首的人  
-        return simqueue.dequeue()  
+    
+    while simqueue.size() > 1:  
+        for i in range(num):  
+            simqueue.enqueue(simqueue.dequeue())  
+        simqueue.dequeue()# 淘汰在队首的人  
+    return simqueue.dequeue()  
+
 print(hotPotato(["xz","xm","xh","xh","xl","xl","xm","xh"],3))
 ```
-5. 打印任务
-	1. 多人共享一台打印机，采取“先到先服务”的队列策略来执行打印任务
-	2. 几个问题
-		1. 这种打印作业系统的容量有多大
-		2. 在能够接受的等待时间内，系统能容纳多少用户以多高频率提交多少打印任务
-		3. 实例 怎么样设定打印机的模式，让大家都不会等太久的前提下尽量提高打印质量
-		4. 一个实验室，在任意的一个小时内，大约有10名学成在场
-		5. 这一小时中，没人会发起两次左右的打印，每次1~20页
-		6. 一草稿模式打印的话，每分钟10页
-		7. 以正常模式打印的话，打印质量好，但是速度下降为每分钟5页
+
+#### 2.2 打印任务模拟
+
+多用户共享一台打印机时，通常采用“先到先服务”的队列策略来执行打印任务。通过模拟打印过程，可以分析系统的容量、用户等待时间以及不同打印模式（草稿模式、正常模式）对效率的影响。
+
+**问题设定：**
+
+*   一个实验室，在任意一个小时内，大约有10名学生在场。
+*   这一小时中，每人会发起两次左右的打印，每次1~20页。
+*   草稿模式打印：每分钟10页。
+*   正常模式打印：打印质量好，但速度下降为每分钟5页。
+
+**模拟代码：**
+
 ```python
 import time  
 import random  
-from ListQueue import Queue  
-  
+# 假设 ListQueue 模块中包含 Queue 类，这里为了代码独立性，直接使用上面定义的 Queue 类
+# from ListQueue import Queue  
+
+class Queue:  
+    def __init__(self):
+        self.items = []  
+
+    def enqueue(self, item):  
+        self.items.insert(0, item) # 在列表头部插入，作为队尾
+
+    def dequeue(self):  
+        if not self.isEmpty():
+            return self.items.pop() # 从列表尾部移除，作为队首
+        else:
+            return None
+
+    def size(self):  
+        return len(self.items)  
+
+    def isEmpty(self):  
+        return self.items == []
   
 class Printer:  
     def __init__(self, ppm):  
@@ -360,13 +531,14 @@ class Printer:
   
     def start_next(self, new_task):  
         self.current_task = new_task  
+        # 计算完成当前任务所需的时间（秒）
         self.time_remaining = new_task.get_pages() * 60 / self.page_rate  
   
   
 class Task:  
     def __init__(self, time):  
         self.timestamp = time  
-        self.pages = random.randrange(1, 21)  
+        self.pages = random.randrange(1, 21)  # 1到20页随机
   
     def get_stamp(self):  
         return self.timestamp  
@@ -378,150 +550,191 @@ class Task:
         return current_time - self.timestamp  
   
   
-def new_print_task():  
-    return random.randrange(1, 181) == 1  
-  
-  
 def simulation(num_seconds, pages_per_minute):  
-    printer = Printer(pages_per_minute)  
+    lab_printer = Printer(pages_per_minute)  
     print_queue = Queue()  
     waiting_times = []  
   
     for current_second in range(num_seconds):  
-        if new_print_task():  
-            print_queue.enqueue(Task(current_second))  
+        # 每180秒（3分钟）创建一个新任务的概率
+        if random.randrange(1, 181) == 180: # 假设每小时10人，每人2次，共20次，每小时3600秒，3600/20 = 180秒一个任务
+            task = Task(current_second)  
+            print_queue.enqueue(task)  
   
-        if (not printer.busy()) and (not print_queue.isEmpty()):  
+        if (not lab_printer.busy()) and (not print_queue.isEmpty()):  
             next_task = print_queue.dequeue()  
             waiting_times.append(next_task.wait_time(current_second))  
-            printer.start_next(next_task)  
+            lab_printer.start_next(next_task)  
   
-        printer.tick()  
+        lab_printer.tick()  
   
-    if waiting_times:  # 避免除零错误  
-        average_wait = sum(waiting_times) / len(waiting_times)  
-        print(f"平均等待时间: {average_wait:.2f}秒，剩余任务: {print_queue.size()}")  
-    else:  
-        print("没有处理任何任务")  
+    average_wait = sum(waiting_times) / len(waiting_times)  
+    print(f"Average Wait {average_wait:.2f} secs {print_queue.size()} tasks remaining.")  
   
-  
-# 示例：模拟1小时(3600秒)，打印速度5页/分钟  
-simulation(3600, 5)
+# 运行模拟，例如模拟一小时（3600秒）
+simulation(3600, 10) # 草稿模式，每分钟10页
+simulation(3600, 5)  # 正常模式，每分钟5页
 ```
-#### 双端队列 Deque
-1. 是一种有次序的数据集，在deque中数据项既可以从队首加入，也可以从队尾加入；数据项也可以从两端移除。从某种意义上来说双端队列集成了栈和队列的能力
-2. 双端队列不具有内在的lifo后者fifo特性
-3. 使用List来实现deque [[双端队列]]
+
+#### 2.3 双端队列（Deque）
+
+**双端队列**（Double-Ended Queue，简称Deque）是一种允许在两端进行插入和删除的有序数据项集合。它结合了栈和队列的特性，既可以像栈一样从一端操作，也可以像队列一样从两端操作。
+
+**双端队列的操作：**
+
+*   `Deque()`：创建一个空双端队列。
+*   `addFront(item)`：在队首添加一个数据项。
+*   `addRear(item)`：在队尾添加一个数据项。
+*   `removeFront()`：从队首移除一个数据项。
+*   `removeRear()`：从队尾移除一个数据项。
+*   `isEmpty()`：检查双端队列是否为空。
+*   `size()`：返回双端队列中数据项的个数。
+
+**使用列表实现双端队列：**
+
 ```python
-class Deque:  
-    def __init__(self):  
-        self.items = []  
-    def isEmpty(self):  
-        return self.items == []  
-    def addFront(self, item):  
-        self.items.append(item)  
-    def addRear(self, item):  
-        self.items.insert(0, item)  
-    def removeFront(self):  
-        return self.items.pop()  
-    def removeRear(self):  
-        return self.items.pop(0)  
-    def size(self):  
+class Deque:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def addFront(self, item):
+        self.items.append(item)
+
+    def addRear(self, item):
+        self.items.insert(0, item)
+
+    def removeFront(self):
+        if not self.isEmpty():
+            return self.items.pop()
+        else:
+            return None
+
+    def removeRear(self):
+        if not self.isEmpty():
+            return self.items.pop(0)
+        else:
+            return None
+
+    def size(self):
         return len(self.items)
 ```
-	。实现回文词判断的实现
-```python
-from Listdeque import Deque  
-  
-  
-def palchecker(string):  
-    chsrdeque=Deque()  
-    for ch in string:  
-        chsrdeque.addRear(ch)  
-  
-    stillEqual=True  
-    while chsrdeque.size()>1 and stillEqual:  
-        last=chsrdeque.removeRear()  
-        first=chsrdeque.removeFront()  
-        if first==last:  
-            stillEqual=True  
-        else:  
-            stillEqual=False  
-  
-    return stillEqual  
-  
-print(palchecker("上海自来水来自海上"))
-```
-#### 列表 List
-一种数据项按照相对位置存放的数据集
+
+#### 2.4 回文词检查器
+
+回文词（Palindrome）是指正读反读都一样的字符串，例如“madam”或“racecar”。双端队列可以有效地检查一个字符串是否为回文词，通过同时从两端移除字符并进行比较。
 
 ```python
-# 空列表
-empty_list = []
-empty_list = list()
+# 假设 Deque 类已定义，这里为了代码独立性，直接使用上面定义的 Deque 类
+# from pythonds.basic.deque import Deque
 
-# 包含元素的列表
-numbers = [1, 2, 3, 4, 5]
-fruits = ['apple', 'banana', 'orange']
-mixed = [1, 'hello', 3.14, True]
+class Deque:
+    def __init__(self):
+        self.items = []
+
+    def isEmpty(self):
+        return self.items == []
+
+    def addFront(self, item):
+        self.items.append(item)
+
+    def addRear(self, item):
+        self.items.insert(0, item)
+
+    def removeFront(self):
+        if not self.isEmpty():
+            return self.items.pop()
+        else:
+            return None
+
+    def removeRear(self):
+        if not self.isEmpty():
+            return self.items.pop(0)
+        else:
+            return None
+
+    def size(self):
+        return len(self.items)
+
+def palchecker(aString):
+    chardeque = Deque()
+
+    for ch in aString:
+        chardeque.addRear(ch)
+
+    stillEqual = True
+
+    while chardeque.size() > 1 and stillEqual:
+        first = chardeque.removeFront()
+        last = chardeque.removeRear()
+        if first != last:
+            stillEqual = False
+
+    return stillEqual
+
+print(palchecker("lsdkjfskf"))
+print(palchecker("radar"))
 ```
 
-```python
-my_list = ['a', 'b', 'c', 'd', 'e']
+### 3. 列表（List）
 
-# 索引访问（从0开始）
-print(my_list[0])    # 'a'
-print(my_list[2])    # 'c'
+Python的列表是一种非常灵活的线性数据结构，可以存储任意类型的数据，并且支持动态大小调整。列表是可变的，这意味着可以在创建后修改其内容。
 
-# 负数索引（从末尾开始）
-print(my_list[-1])   # 'e'
-print(my_list[-2])   # 'd'
-
-# 切片操作
-print(my_list[1:3])  # ['b', 'c']
-print(my_list[:3])   # ['a', 'b', 'c']
-print(my_list[2:])   # ['c', 'd', 'e']
-```
-
-```python
-my_list = ['a', 'b', 'c', 'd', 'e']
-
-# 索引访问（从0开始）
-print(my_list[0])    # 'a'
-print(my_list[2])    # 'c'
-
-# 负数索引（从末尾开始）
-print(my_list[-1])   # 'e'
-print(my_list[-2])   # 'd'
-
-# 切片操作
-print(my_list[1:3])  # ['b', 'c']
-print(my_list[:3])   # ['a', 'b', 'c']
-print(my_list[2:])   # ['c', 'd', 'e']
-```
+**列表的基本操作：**
 
 ```python
 my_list = [1, 2, 3, 4]
 
 # 修改元素
 my_list[1] = 20      # [1, 20, 3, 4]
+print(f"修改元素后: {my_list}")
 
 # 添加元素
 my_list.append(5)    # [1, 20, 3, 4, 5]
+print(f"append后: {my_list}")
 my_list.insert(1, 15) # [1, 15, 20, 3, 4, 5]
+print(f"insert后: {my_list}")
 
 # 删除元素
 del my_list[2]       # [1, 15, 3, 4, 5]
+print(f"del后: {my_list}")
 removed = my_list.pop() # [1, 15, 3, 4], removed = 5
+print(f"pop后: {my_list}, 移除的元素: {removed}")
 my_list.remove(15)   # [1, 3, 4]
+print(f"remove后: {my_list}")
 ```
-#### 链[[链表]]表
-##### 无序表
-链表由一系列节点组成，每个节点包括两个部分
-. 数据域：存储数据
-. 指针域：指向下一个节点的地址
+
+### 4. 链表（Linked List）
+
+**链表**是一种物理存储单元上非连续、非顺序的存储结构，数据元素的逻辑顺序是通过链表中的指针链接次序实现的。链表由一系列**节点**组成，每个节点通常包括两个部分：
+
+*   **数据域**：存储数据。
+*   **指针域**：指向下一个节点的地址。
+
+#### 4.1 无序表（Unordered List）
+
+无序表是最基本的链表形式，节点之间没有特定的顺序关系。以下是一个简单的单向链表实现。
 
 ```python
+class SinglyListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+    def getData(self):
+        return self.val
+
+    def getNext(self):
+        return self.next
+
+    def setData(self, newval):
+        self.val = newval
+
+    def setNext(self, newnext):
+        self.next = newnext
+
 class LinkedList:
     def __init__(self):
         self.head = None
@@ -544,21 +757,27 @@ class LinkedList:
         new_node.next = self.head
         self.head = new_node
     
-    def delete(self, val):
+    def delete(self, item): # 将 val 改为 item 以匹配内部使用
         """删除指定值的节点"""
         current=self.head
         previous=None
         found=False
-        while not found:
-	        if current.getData()==item:
-		        found=True
-		    else:
-			    previous=current
-			    curren=curren.getNext()
-		if previous==None:
-			self.head=current.getNext()
-		else:
-			previous.setNext(current.getNext())
+        while current and not found: # 增加 current 的检查，防止空指针
+            if current.getData()==item:
+                found=True
+            else:
+                previous=current
+                current=current.getNext()
+        
+        if not found: # 如果没有找到，可以抛出异常或返回False
+            print(f"Error: Item {item} not found in the list.")
+            return False
+
+        if previous==None:
+            self.head=current.getNext()
+        else:
+            previous.setNext(current.getNext())
+        return True
     
     def display(self):
         """显示链表内容"""
@@ -582,11 +801,98 @@ class LinkedList:
         
         self.head = prev
 
+# 链表相关内容，参考：[链表](https://zh.wikipedia.org/wiki/%E9%93%BE%E8%A1%A8)
 ```
-##### 有序表
+
+#### 4.2 有序表（Ordered List）
+
+**有序表**是一种链表，其中数据项按照某种特定的顺序（例如升序或降序）排列。在有序表中插入新数据项时，需要遍历链表找到正确的插入位置以保持顺序。
+
 ```python
 class OrderedList:
-	def _init_(self):
-		self.head=None
+    def __init__(self):
+        self.head = None
+
+    def add(self, item):
+        current = self.head
+        previous = None
+        stop = False
+        while current != None and not stop:
+            if current.getData() > item:
+                stop = True
+            else:
+                previous = current
+                current = current.getNext()
+
+        temp = SinglyListNode(item) # 假设 SinglyListNode 已定义
+        if previous == None:
+            temp.setNext(self.head)
+            self.head = temp
+        else:
+            temp.setNext(current)
+            previous.setNext(temp)
+
+    def isEmpty(self):
+        return self.head == None
+
+    def size(self):
+        current = self.head
+        count = 0
+        while current != None:
+            count = count + 1
+            current = current.getNext()
+        return count
+
+    def search(self, item):
+        current = self.head
+        found = False
+        stop = False
+        while current != None and not found and not stop:
+            if current.getData() == item:
+                found = True
+            else:
+                if current.getData() > item:
+                    stop = True
+                else:
+                    current = current.getNext()
+        return found
+
+    def remove(self, item):
+        current = self.head
+        previous = None
+        found = False
+        while current != None and not found:
+            if current.getData() == item:
+                found = True
+            else:
+                previous = current
+                current = current.getNext()
+
+        if found:
+            if previous == None:
+                self.head = current.getNext()
+            else:
+                previous.setNext(current.getNext())
+        else:
+            print(f"Error: Item {item} not found in the ordered list.")
+
+    def display(self):
+        elements = []
+        current = self.head
+        while current:
+            elements.append(str(current.getData()))
+            current = current.getNext()
+        print(" -> ".join(elements) + " -> None")
 ```
+
 ## 递归
+
+**递归**是一种编程技术，它通过函数调用自身来解决问题。递归函数通常包含一个或多个**基本情况**（base case），这些情况可以直接解决而无需进一步递归；以及一个或多个**递归情况**（recursive case），这些情况将问题分解为更小的子问题，并通过调用自身来解决这些子问题。
+
+**递归**是一种强大的编程技术，它通过函数调用自身来解决问题。一个典型的递归函数包含两个主要部分：
+
+1.  **基本情况（Base Case）**：这是递归停止的条件。当满足基本情况时，函数会直接返回一个结果，而不再进行递归调用。这是防止无限递归的关键。
+2.  **递归情况（Recursive Case）**：在这种情况下，函数会将当前问题分解为更小的子问题，并调用自身来解决这些子问题。每次递归调用都会使问题规模减小，最终达到基本情况。
+
+递归在解决许多算法问题时非常有用，例如树的遍历、分治算法（如快速排序、归并排序）、阶乘计算、斐波那契数列等。理解递归的关键在于识别问题的重复结构和明确的终止条件。
+

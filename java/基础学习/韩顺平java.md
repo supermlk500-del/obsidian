@@ -4960,38 +4960,581 @@ list.addAll(list2);
 ```
 8. `contains`查找多个元素;使用和`7`类似
 
+## 📌 Collection 接口 —— Iterator（迭代器）
 
-### List（有序、可重复）
+### 一、Iterator 的基本使用流程（⭐必背）
 
-- ArrayList
+**使用步骤固定三步：**
 
-- LinkedList
+```java
+Collection col = new ArrayList();
+col.add("java");
+col.add(100);
+col.add(true);
 
-- Vector
+// 1. 得到迭代器
+Iterator iterator = col.iterator();
 
+// 2. 判断是否还有下一个元素
+while (iterator.hasNext()) {
+    // 3. 取出下一个元素
+    Object obj = iterator.next();
+    System.out.println(obj);
+}
+```
+
+📌 **核心口诀**：  
+👉 `iterator()` → `hasNext()` → `next()`
 
 ---
 
-### Set（无序、不可重复）
+### 二、Iterator 的底层思想（⭐理解点）
 
-- HashSet
+1. `Iterator` **不是集合本身**
     
-- TreeSet
+2. 它是一个**访问集合元素的“工具对象”**
     
+3. 内部通过一个**游标（cursor）** 指向当前遍历位置
+    
+4. 每调用一次 `next()`，游标就会**向后移动一位**
+    
+
+⚠️ **next() 的作用有两个**：
+
+- 返回当前元素
+    
+- 指针下移
+    
+
+---
+
+### 三、Iterator 遍历的特点
+
+1. **所有 Collection 的实现类都支持 Iterator**
+    
+    - List：ArrayList、LinkedList
+        
+    - Set：HashSet、LinkedHashSet
+        
+2. **遍历方式是统一的**
+    
+3. 不关心集合的具体实现类（多态）
+    
+
+👉 这就是 **面向接口编程** 的典型体现
+
+---
+
+### 四、Iterator 的注意事项（⭐高频考点）
+
+#### ❌ 1. 不要越界调用 next()
+
+```java
+Iterator it = col.iterator();
+it.next(); // 如果没有 hasNext() 判断，可能抛异常
+```
+
+⚠️ 如果没有下一个元素还调用 `next()`  
+👉 抛出异常：`NoSuchElementException`
+
+✅ 正确写法必须配合 `hasNext()`
+
+---
+
+#### ❌ 2. 不能在遍历过程中直接修改集合
+
+```java
+while (iterator.hasNext()) {
+    Object obj = iterator.next();
+    if (obj.equals("java")) {
+        col.remove(obj); // ❌ 会抛异常
+    }
+}
+```
+
+🚨 会抛出：`ConcurrentModificationException`
+
+✅ 正确删除方式（Iterator 自带）：
+
+```java
+iterator.remove();
+```
+
+---
+
+### 五、Iterator 的 remove() 方法（⭐易忽略）
+
+1. `remove()` 用于**删除刚刚遍历到的元素**
+    
+2. 必须先调用 `next()`，再调用 `remove()`
+    
+3. 每次 `next()` **只能调用一次 `remove()`**
+    
+
+❌ 错误示例：
+
+```java
+iterator.remove(); // 直接调用，报错
+```
+
+---
+
+### 六、Iterator 的生命周期
+
+1. 一个 Iterator 对象  
+    👉 **只能遍历一次**
+    
+2. 遍历结束后，指针已经在末尾
+    
+3. 想重新遍历，必须重新获取 Iterator
+    
+
+```java
+iterator = col.iterator(); // 重新获取
+```
+
+---
+
+### 七、Iterator vs 增强 for（for-each）
+
+#### 增强 for 本质
+
+```java
+for (Object obj : col) {
+    System.out.println(obj);
+}
+```
+
+📌 **本质就是 Iterator 的语法糖**
+
+等价于：
+
+```java
+Iterator it = col.iterator();
+while (it.hasNext()) {
+    Object obj = it.next();
+}
+```
+
+#### 对比总结
+
+|对比项|Iterator|增强 for|
+|---|---|---|
+|可读性|一般|⭐⭐⭐|
+|可删除元素|✅ iterator.remove()|❌|
+|本质|接口|Iterator|
+
+---
+
+### 八、总结（直接背）
+
+1. `Iterator` 用于 **遍历 Collection 集合**
+    
+2. `Iterator` 本身 **不存储数据**
+    
+3. `iterator()` 方法由 Collection 提供
+    
+4. `hasNext()` 判断是否有下一个元素
+    
+5. `next()` 返回元素并下移指针:在调用这个方法之前必须要先调用`iterator`.hasNext()进行检测.若不调用,且下一条记录无效,直接调用it.next()会抛出异常
+    
+6. 遍历时 **不能直接修改集合**
+    
+7. 增强 for **底层就是 Iterator**
+## ✅ Collection 三种遍历方式对比表
+
+|遍历方式|使用方式|是否通用 Collection|是否可删除元素|底层原理|使用场景|
+|---|---|---|---|---|---|
+|**Iterator 迭代器**|`Iterator it = col.iterator()`|✅ 是|✅ `it.remove()`|游标遍历|⭐最推荐、最安全|
+|**增强 for（for-each）**|`for(Object o : col)`|✅ 是|❌|Iterator 语法糖|⭐只读遍历|
+|**普通 for 循环**|`for(int i=0;i<list.size();i++)`|❌ 仅 List|✅|下标访问|List 特有操作|
+
+---
+
+## ✅ List（有序、可重复）
+
+---
+
+### ArrayList
+
+- 可以加入 `null`，并且可以加入多个
+    
+- 底层由 **数组** 实现数据存储
+    
+- 支持下标访问，查询效率高
+    
+- 线程不安全（方法未使用 `synchronized`）
+    
+- 在多线程环境下不建议使用 `ArrayList`
+    
+- 执行效率高，是最常用的 List 实现类
+    
+
+#### 底层机制 / 源码分析
+
+- 内部维护了一个 `Object[] elementData`
+    
+    - 说明 `ArrayList` 本质是 **Object 数组**
+        
+    - 可以存放任意引用类型对象
+        
+- 使用无参构造器创建 `ArrayList`
+    
+    ```java
+    ArrayList list = new ArrayList();
+    ```
+    
+    - 初始容量为 `0`
+        
+    - 第一次 `add()` 时扩容为 `10`
+        
+    - 后续扩容规则：**原容量的 1.5 倍**
+        
+- 使用有参构造器创建 `ArrayList`
+    
+    ```java
+    ArrayList list = new ArrayList(20);
+    ```
+    
+    - 初始容量为指定大小
+        
+    - 扩容时直接按 **1.5 倍** 扩容
+        
+- 扩容本质
+    
+    - 创建新数组
+        
+    - 使用 `Arrays.copyOf()` 进行数组拷贝
+        
+    - 频繁扩容会影响性能
+        
+
+#### 特点总结
+
+- 查询快
+    
+- 增删慢（涉及数组移动）
+    
+- 线程不安全
+    
+- 底层是数组
+    
+
+---
+
+### LinkedList
+
+- 可以加入 `null`，并且可以加入多个
+    
+- 底层由 **双向链表** 实现
+    
+- 不需要扩容
+    
+- 不适合频繁随机访问
+    
+
+#### 底层机制 / 源码分析
+
+- 底层是双向链表结构
+    
+
+```java
+private static class Node<E> {
+    E item;
+    Node<E> next;
+    Node<E> prev;
+}
+```
+
+- 内部维护两个重要引用
+    
+    - `first`：头节点
+        
+    - `last`：尾节点
+        
+- 添加或删除元素时
+    
+    - 只需修改节点引用
+        
+    - 不涉及数组拷贝
+        
+
+#### 特点总结
+
+- 增删快
+    
+- 查询慢
+    
+- 不适合大量随机访问
+    
+- 底层是双向链表
+    
+
+---
+
+### Vector（了解）
+
+- 可以加入 `null`，并且可以加入多个
+    
+- 底层同样是 **数组**
+    
+- 线程安全
+    
+- 执行效率低
+    
+
+#### 底层机制 / 源码分析
+
+- 内部维护 `Object[] elementData`
+    
+- 方法大多使用了 `synchronized`
+    
+    - 保证线程安全
+        
+    - 导致性能下降
+        
+- 扩容机制
+    
+    - 默认扩容为 **2 倍**
+        
+    - 或按 `capacityIncrement` 指定增量
+        
+
+#### 特点总结
+
+- 线程安全
+    
+- 效率低
+    
+- 已逐渐被淘汰
+    
+- 可被 `Collections.synchronizedList()` 替代
+    
+
+---
+
+### List 三大实现类对比总结
+
+| 实现类        | 底层结构 | 线程安全 | 查询效率 | 增删效率 | 使用场景 |
+| ---------- | ---- | ---- | ---- | ---- | ---- |
+| ArrayList  | 数组   | ❌    | 快    | 慢    | 最常用  |
+| LinkedList | 双向链表 | ❌    | 慢    | 快    | 频繁增删 |
+| Vector     | 数组   | ✅    | 快    | 慢    | 基本不用 |
+
+---
+
+### 一句话速记
+
+- **ArrayList 查询快，LinkedList 增删快**
+    
+- **Vector 线程安全但效率低**
+    
+- **List 有序、可重复、可存 null**
+    
+
+
+## ✅ Set（无序、不可重复）
+
+- Set 接口是 Collection 的子接口（但是不能使用索引的方式来获取）
+    
+- 元素 **无序（添加顺序 ≠ 存储顺序）**
+    
+- 元素 **不可重复**
+    
+- **最多允许一个 `null`**（取决于具体实现类）
+    
+- 常用于 **去重** 场景
+    
+
+---
+
+### HashSet（⭐重点）
+
+- 可以存放 `null`，但只能存一个
+    
+- 不保证元素存储顺序
+    
+- 底层基于 **HashMap** 实现
+    
+- 线程不安全
+    
+- 使用最广泛的 Set 实现类
+    
+
+#### 底层机制 / 源码分析
+
+- `HashSet` 底层实际是一个 `HashMap`
+    
+
+```java
+private transient HashMap<E,Object> map;
+```
+
+- 添加元素本质：
+    
+    - 调用 `HashMap.put(key, PRESENT)`
+        
+    - Set 的元素作为 **key**
+        
+    - value 是一个固定的 Object 对象
+        
+- 去重原理（⭐高频）
+    
+    - 先调用 `hashCode()`
+        
+    - 再调用 `equals()`
+        
+    - 两者都相同 → 判定为重复元素
+        
+
+#### 重要结论
+
+- 如果两个对象 `hashCode()` 相同，`equals()` 不同  
+    → 仍然可以存入
+    
+- 如果 `equals()` 相同，`hashCode()` 不同  
+    → 违反规范，可能导致逻辑错误
+    
+
+📌 **重写 equals 时必须重写 hashCode**
+
+#### 特点总结
+
+- 无序
+    
+- 不可重复
+    
+- 查询速度快
+    
+- 底层是 HashMap
+    
+
+---
+
+### LinkedHashSet
+
+- 可以存放 `null`，只能一个
+    
+- **保证元素的插入顺序**
+    
+- 底层是 **LinkedHashMap**
+    
+- 性能略低于 HashSet
+    
+
+#### 底层机制 / 源码分析
+
+- 继承自 `HashSet`
+    
+- 底层 `HashMap` 变为 `LinkedHashMap`
+    
+- 在 HashMap 的基础上：
+    
+    - 增加了一条 **双向链表**
+        
+    - 维护元素的插入顺序
+        
+
+#### 特点总结
+
+- 去重 + 保序
+    
+- 底层：哈希表 + 双向链表
+    
+- 遍历顺序 == 插入顺序
+    
+
+---
+
+### TreeSet（⭐有序 Set）
+
+- **不允许存放 `null`**
+    
+- 元素自动排序
+    
+- 底层是 **红黑树**
+    
+- 线程不安全
+    
+
+#### 排序规则
+
+- 默认：**自然排序**
+    
+    - 元素必须实现 `Comparable` 接口
+        
+- 定制排序：
+    
+    - 通过 `Comparator` 传入比较规则
+        
+
+```java
+Set set = new TreeSet(new Comparator() {
+    @Override
+    public int compare(Object o1, Object o2) {
+        return ((String)o1).length() - ((String)o2).length();
+    }
+});
+```
+
+#### 底层机制 / 特点
+
+- 去重规则：
+    
+    - **compare() 返回 0 → 判定为重复**
+        
+- 与 `equals()` 无关（⭐考试爱考）
+    
+
+#### 特点总结
+
+- 有序
+    
+- 不可重复
+    
+- 查询、插入效率低于 HashSet
+    
+- 底层是红黑树
+    
+
+---
+
+### Set 三大实现类对比总结
+
+|实现类|底层结构|是否有序|是否允许 null|去重依据|使用场景|
+|---|---|---|---|---|---|
+|HashSet|HashMap|无序|✅ 一个|hashCode + equals|最常用|
+|LinkedHashSet|LinkedHashMap|插入顺序|✅ 一个|hashCode + equals|去重 + 保序|
+|TreeSet|红黑树|排序顺序|❌|compare / compareTo|排序去重|
+
+---
+
+### 一句话速记（⭐直接背）
+
+- **Set 无序、不可重复**
+    
+- **HashSet 去重靠 hashCode + equals**
+    
+- **LinkedHashSet 既去重又保序**
+    
+- **TreeSet 通过比较规则排序去重**
+    
+
 
 ---
 
 ## Map（双列集合）
 
+
 ### HashMap
-#### `LinkedHashMap`
+
+#### LinkedHashMap
 
 ### TreeMap
 
 ### Hashtable
 
 ### Properties
-
 
 
 
