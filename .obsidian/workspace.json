@@ -4,21 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "9943943e79abb523",
+        "id": "32103e980098a628",
         "type": "tabs",
         "children": [
           {
-            "id": "47b8bc6452995884",
+            "id": "8eb62a7e3dd592bf",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "java/基础学习/韩顺平java.md",
+                "file": "ai/OpenClaw.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "韩顺平java"
+              "title": "OpenClaw"
             }
           }
         ],
@@ -54,7 +54,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "linkedli",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -128,13 +128,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "java/基础学习/韩顺平java.md",
+                "file": "ai/OpenClaw.md",
                 "followCursor": true,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "韩顺平java 的大纲"
+              "title": "OpenClaw 的大纲"
             }
           },
           {
@@ -185,9 +185,21 @@
   "active": "8fe254d5cbf7adee",
   "lastOpenFiles": [
     "java/Spring/Spring-Framework.md",
-    "书/Python数据结构与算法分析_第2版.pdf",
-    "ai/Open-AutoGlm.md",
+    "ai/OpenClaw.md",
+    "java/javaSpringBoot/spring_boot_导航笔记.md",
     "java/基础学习/韩顺平java.md",
+    "软著/填表.md",
+    "java/基础学习/连接/LinkedHashSet底层.md",
+    "java/基础学习/连接/hashset底层.md",
+    "AndroidStudio/课程笔记.md",
+    "ai/claude code.md",
+    "python/核心算法学习/算法笔记.md",
+    "软著/未命名.md",
+    "软著",
+    "python/核心算法学习/算法.md",
+    "python/核心算法学习/在全排列中切片的一种特殊形式，浅拷贝.md",
+    "ai/Open-AutoGlm.md",
+    "书/Python数据结构与算法分析_第2版.pdf",
     "java/Spring",
     "java/javaEE/Spring-Boot.md",
     "测试/测试工具/Monkey.md",
@@ -200,25 +212,14 @@
     "python/扩展.md",
     "python/deepseek/打印作业.md",
     "python/deepseek/双端队列.md",
-    "python/核心算法学习/算法.md",
-    "python/核心算法学习/算法笔记.md",
-    "python/核心算法学习/在全排列中切片的一种特殊形式，浅拷贝.md",
     "python/链表.md",
     "python/对比list和dict的操作.md",
     "python/openEuler.md",
-    "java/基础学习/连接/方法调用机制.md",
-    "java/基础学习/连接/switch语法.md",
-    "java/基础学习/连接/int 与 integer.md",
-    "java/基础学习/连接/5（位运算）.md",
-    "版本控制/Git笔记.md",
     "python/核心算法学习",
-    "python/python扩展/表达式.md",
-    "python/python扩展/timeit模块.md",
     "python/python扩展",
     "python/idle/selecttion_sort.py",
     "python/idle/quick_sort.py",
     "python/idle/permutation_best.py",
-    "python/idle/permutation_arr.py",
     "测试/测试工具/images/连接.png",
     "测试/测试工具/images/完整执行.png",
     "测试/测试工具/images/添加测试数据2.png",

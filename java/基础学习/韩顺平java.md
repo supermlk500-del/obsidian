@@ -5386,7 +5386,7 @@ private transient HashMap<E,Object> map;
         
     - 两者都相同 → 判定为重复元素
         
-
+	- 在`jdk8`中,如果一条链表的元素个数到达`TREEIFY_THRESHOLD`(默认是8)并且`table`的大小`>=``MIN_TREELFY_CAPACITY(默认是64)`就会进行树化,也就是红黑树
 #### 重要结论
 
 - 如果两个对象 `hashCode()` 相同，`equals()` 不同  
@@ -5408,6 +5408,7 @@ private transient HashMap<E,Object> map;
     
 - 底层是 HashMap
     
+[[hashset底层]]
 
 ---
 
@@ -5426,15 +5427,16 @@ private transient HashMap<E,Object> map;
 
 - 继承自 `HashSet`
     
-- 底层 `HashMap` 变为 `LinkedHashMap`
+- 底层 `HashMap` 变为 `LinkedHashMap（tail，和 head）`
     
 - 在 HashMap 的基础上：
     
     - 增加了一条 **双向链表**
-        
+		
     - 维护元素的插入顺序
-        
-
+	    
+- 每一个节点有`before`和`affter`属性,这样可以形成双向链表
+- 在添加一个元素时,先求`hash`值,在求索引确定该元素在`table`的位置,然后将添加的元素加入到双向链表
 #### 特点总结
 
 - 去重 + 保序
@@ -5443,6 +5445,7 @@ private transient HashMap<E,Object> map;
     
 - 遍历顺序 == 插入顺序
     
+[[LinkedHashSet底层]]
 
 ---
 
@@ -5524,9 +5527,17 @@ Set set = new TreeSet(new Comparator() {
 ---
 
 ## Map（双列集合）
-
-
+- `Map`接口实现类的特点
+1. `Map`于`Collection`并列存在.用于保存具有映射关系额数据:`Key-Value`
+2. `Map`中的`key`和`value`可以是任何引用类型的数据,会封装到`HashMap$Node`对象中
+3. `Map`中的`key`不允许重复,当有相同的`key`时会进行替换
+4. `Map`中的`value`可以重复
+5. `Map`的`key`可以为`null`,注意`key`为`null`只能有一个,`value`为`null`可以多个
+6. 常用`String`类作为`Map`的`key`
+7. `key`和`value`之间存在单向一对一关系,即通过制定的`key`总能找到对应的`value`
+8. 
 ### HashMap
+
 
 #### LinkedHashMap
 
