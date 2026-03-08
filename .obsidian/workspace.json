@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "ai/OpenClaw.md",
+                "file": "ai/OpenClaw完整安装教程.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "OpenClaw"
+              "title": "OpenClaw完整安装教程"
             }
           }
         ],
@@ -128,13 +128,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ai/OpenClaw.md",
+                "file": "ai/OpenClaw完整安装教程.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "OpenClaw 的大纲"
+              "title": "OpenClaw完整安装教程 的大纲"
             }
           },
           {
@@ -182,20 +182,20 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "8fe254d5cbf7adee",
+  "active": "5dfee825210613fe",
   "lastOpenFiles": [
+    "ai/OpenClaw.md",
+    "ai/OpenClaw完整安装教程.md",
     "ai/images/飞书1.png",
     "ai/images/飞书2.png",
     "ai/images/飞书4.png",
     "ai/images/飞书g.png",
     "ai/images/飞书f.png",
     "ai/images/飞书e.png",
-    "ai/OpenClaw.md",
     "ai/images/飞书d.png",
     "ai/images/飞书3.png",
     "Pasted image 20260308200305.png",
     "ai/images/飞书c.png",
-    "ai/images/飞书b.png",
     "ai/Gemini.md",
     "java/基础学习/韩顺平java.md",
     "ai/claude code.md",
