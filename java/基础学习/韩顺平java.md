@@ -5535,7 +5535,39 @@ Set set = new TreeSet(new Comparator() {
 5. `Map`的`key`可以为`null`,注意`key`为`null`只能有一个,`value`为`null`可以多个
 6. 常用`String`类作为`Map`的`key`
 7. `key`和`value`之间存在单向一对一关系,即通过制定的`key`总能找到对应的`value`
-8. 
+
+### 遍历方法
+
+```java
+   Map map = new HashMajp()
+   map.put("1","2");
+   map.put("3","4");
+   map.put("5","6");
+   map.put("7","8");
+   map.put("9","10");
+   //第一组:先取出所有的Key,通过Key取出对应的value
+   Set keyset = map.keySet();
+   //1. mapfor增强for
+   System.out.println("");
+   for (Object key : keySet){
+	   System.out.println(key + "-" + map.get(key));
+   }
+   //2. 迭代器
+   Iterator iterator = keyset.iterator();
+   while (iterator.hashNext()){
+	   Object key = iterator.next();
+	   System.out.println(key + "-" + map.get(key));
+   }
+   //第二组:把所有的value取出来
+   Collection values = map.values();
+   for(Object value :values){
+	   System.out.println(value)
+   }
+   //迭代器
+   
+```
+
+
 ### HashMap
 
 

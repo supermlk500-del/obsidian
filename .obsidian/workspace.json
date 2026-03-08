@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "32103e980098a628",
+        "id": "02c5be876fcea68b",
         "type": "tabs",
         "children": [
           {
-            "id": "8eb62a7e3dd592bf",
+            "id": "5dfee825210613fe",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -79,7 +79,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 268.5
+    "width": 342.5
   },
   "right": {
     "id": "b6a959e99b19578e",
@@ -129,7 +129,7 @@
               "type": "outline",
               "state": {
                 "file": "ai/OpenClaw.md",
-                "followCursor": true,
+                "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
@@ -184,15 +184,28 @@
   },
   "active": "8fe254d5cbf7adee",
   "lastOpenFiles": [
-    "java/Spring/Spring-Framework.md",
+    "ai/images/飞书1.png",
+    "ai/images/飞书2.png",
+    "ai/images/飞书4.png",
+    "ai/images/飞书g.png",
+    "ai/images/飞书f.png",
+    "ai/images/飞书e.png",
     "ai/OpenClaw.md",
-    "java/javaSpringBoot/spring_boot_导航笔记.md",
+    "ai/images/飞书d.png",
+    "ai/images/飞书3.png",
+    "Pasted image 20260308200305.png",
+    "ai/images/飞书c.png",
+    "ai/images/飞书b.png",
+    "ai/Gemini.md",
     "java/基础学习/韩顺平java.md",
+    "ai/claude code.md",
+    "版本控制/Git笔记.md",
+    "java/Spring/Spring-Framework.md",
+    "java/javaSpringBoot/spring_boot_导航笔记.md",
     "软著/填表.md",
     "java/基础学习/连接/LinkedHashSet底层.md",
     "java/基础学习/连接/hashset底层.md",
     "AndroidStudio/课程笔记.md",
-    "ai/claude code.md",
     "python/核心算法学习/算法笔记.md",
     "软著/未命名.md",
     "软著",
@@ -212,25 +225,12 @@
     "python/扩展.md",
     "python/deepseek/打印作业.md",
     "python/deepseek/双端队列.md",
-    "python/链表.md",
-    "python/对比list和dict的操作.md",
-    "python/openEuler.md",
     "python/核心算法学习",
     "python/python扩展",
     "python/idle/selecttion_sort.py",
     "python/idle/quick_sort.py",
     "python/idle/permutation_best.py",
-    "测试/测试工具/images/连接.png",
-    "测试/测试工具/images/完整执行.png",
-    "测试/测试工具/images/添加测试数据2.png",
-    "测试/测试工具/images/添加测试数据1.png",
-    "测试/测试工具/images/添加接口.png",
-    "测试/测试工具/images/json格式.png",
-    "测试/测试工具/images/全局变量数据.png",
-    "测试/测试工具/images/全局变量管理.png",
-    "测试/测试工具/images/全局变量使用.png",
     "未命名.canvas",
-    "测试/images/开发流程.png",
     "Java/未命名.canvas",
     "python/未命名.canvas"
   ]
