@@ -420,7 +420,3 @@ openclaw config set proxy.port 7890
 - 飞书开放平台：https://open.feishu.cn/
 
 ---
-
-*本教程由 OpenClaw AI 助手"陈情"协助编写*
-
-*如有问题，欢迎反馈！*
