@@ -4,39 +4,24 @@
     "type": "split",
     "children": [
       {
-        "id": "02c5be876fcea68b",
+        "id": "eb13da85a2fb1b46",
         "type": "tabs",
         "children": [
           {
-            "id": "5dfee825210613fe",
+            "id": "fba464f3da85b185",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "版本控制/Git笔记.md",
+                "file": "未命名.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Git笔记"
-            }
-          },
-          {
-            "id": "e106f6370ccfcd0e",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ai/OpenClaw完整安装教程.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "OpenClaw完整安装教程"
+              "title": "未命名"
             }
           }
         ],
-        "currentTab": 1,
         "stacked": true
       }
     ],
@@ -69,7 +54,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "linkedli",
+                "query": "linu",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -94,7 +79,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 342.5
+    "width": 287.5
   },
   "right": {
     "id": "b6a959e99b19578e",
@@ -143,13 +128,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ai/OpenClaw完整安装教程.md",
+                "file": "未命名.md",
                 "followCursor": false,
                 "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "OpenClaw完整安装教程 的大纲"
+              "title": "未命名 的大纲"
             }
           },
           {
@@ -178,7 +163,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 2
       }
     ],
     "direction": "horizontal",
@@ -197,54 +182,53 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "e106f6370ccfcd0e",
+  "active": "fba464f3da85b185",
   "lastOpenFiles": [
-    "ai/OpenClaw前置准备.md",
-    "ai/OpenClaw完整安装教程.md",
-    "ai/OpenClaw.md",
-    "版本控制/Git笔记.md",
-    "ai/images/飞书1.png",
-    "ai/images/飞书2.png",
-    "ai/images/飞书4.png",
-    "ai/images/飞书g.png",
-    "ai/images/飞书f.png",
-    "ai/images/飞书e.png",
-    "ai/images/飞书d.png",
-    "ai/images/飞书3.png",
-    "Pasted image 20260308200305.png",
-    "ai/images/飞书c.png",
-    "ai/Gemini.md",
-    "java/基础学习/韩顺平java.md",
+    "ai/openclaw/OpenClaw.md",
+    "ai/openclaw/OpenClaw完整安装教程.md",
+    "ai/Antigravity.md",
+    "ai/openclaw/OpenClaw 快速入门.md",
+    "未命名.md",
+    "ai/images/代理6.png",
+    "ai/images/代理5.png",
+    "ai/images/代理4.png",
+    "ai/images/代理2.png",
+    "ai/images/代理1.png",
+    "ai/images/antigravity4.png",
+    "ai/images/antigravity3.png",
+    "ai/images/antigravity2.png",
+    "ai/images/antigravity1.png",
+    "java/javaSpringBoot/SpringBoot.md",
     "ai/claude code.md",
-    "java/Spring/Spring-Framework.md",
+    "宝塔 - 副本.md",
+    "platform - 副本.md",
+    "f - 副本.png",
+    "deepseekApiKey - 副本.md",
+    "信息可视化工作台系统_用户操作手册_修改版 - 副本.md",
+    "ai/Gemini.md",
+    "ai/openclaw/OpenClaw 工作区文件详解.md",
+    "f.png.crdownload",
+    "e.png.crdownload",
+    "d,png.webp.crdownload",
+    "c.png.crdownload",
+    "b.png.crdownload",
+    "a.png.crdownload",
+    "ai/openclaw/OpenClaw学习.md",
+    "ai/openclaw",
+    "ai/cursor修改模型.md",
     "java/javaSpringBoot/spring_boot_导航笔记.md",
+    "java/Spring/Spring-Framework.md",
+    "java/基础学习/韩顺平java.md",
+    "信息可视化工作台系统_用户操作手册_修改版.md",
+    "python/openEuler.md",
+    "ai/OpenClaw前置准备.md",
+    "版本控制/Git笔记.md",
+    "版本控制/VistualSvn.md",
     "软著/填表.md",
     "java/基础学习/连接/LinkedHashSet底层.md",
-    "java/基础学习/连接/hashset底层.md",
-    "AndroidStudio/课程笔记.md",
-    "python/核心算法学习/算法笔记.md",
-    "软著/未命名.md",
     "软著",
-    "python/核心算法学习/算法.md",
-    "python/核心算法学习/在全排列中切片的一种特殊形式，浅拷贝.md",
-    "ai/Open-AutoGlm.md",
     "书/Python数据结构与算法分析_第2版.pdf",
     "java/Spring",
-    "java/javaEE/Spring-Boot.md",
-    "测试/测试工具/Monkey.md",
-    "测试/面试（一般步骤，先从自己，再从外界，然后他人，最后集体）.md",
-    "测试/测试工具/ADB.md",
-    "Python基础上机练习.md",
-    "python/python数据结构和算法.md",
-    "书",
-    "书/算法图解.pdf",
-    "python/扩展.md",
-    "python/deepseek/打印作业.md",
-    "python/核心算法学习",
-    "python/python扩展",
-    "python/idle/selecttion_sort.py",
-    "python/idle/quick_sort.py",
-    "python/idle/permutation_best.py",
     "未命名.canvas",
     "Java/未命名.canvas",
     "python/未命名.canvas"
