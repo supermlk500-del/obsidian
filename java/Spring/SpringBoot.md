@@ -159,3 +159,4 @@ public class SpringBootApplication {
 - `@ComponentScan`、`@Repository`、`@ConditionalOnMissingBean` 注意拼写
 - `prefix` 不是 `profix`
 - `selectImports` 不是 `selectimport`
+

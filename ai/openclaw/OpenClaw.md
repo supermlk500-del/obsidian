@@ -249,6 +249,11 @@ openclaw status --deep
 
 注意：如果你是直接替换同一个 provider 的 `apiKey`，那这个 provider 下的其它模型/agent 也会共用这把 key。
 
+## 添加
+```bash
+openclaw agents add new
+```
+
 [登录不了Antigravity](https://zhuanlan.zhihu.com/p/1989455405814936809)
 [[Antigravity]]
 
@@ -535,6 +540,67 @@ openclaw configure
 - 重启`openclaw`
 - **`slots.memory`“把这个插件设置记忆为第一位”**
 ==注意这里的插件存放的位置不重要而是这里的配置文件的paths重要需要指定==
+
+
+
+# ollama接入openclaw
+
+# OpenClaw 升级笔记（2026-03-24）
+## 推荐方式（最省事）
+在 OpenClaw 会话里直接让助手执行 `update.run`，会自动完成更新并重启 Gateway。
+
+## 手动方式（命令行）
+
+```bash
+npm i -g openclaw@latest
+```
+
+升级后建议立刻做健康检查：
+```bash
+openclaw gateway status
+openclaw status --deep
+openclaw doctor --non-interactive
+```
+
+## 升级后排查顺序（遇到 502/异常时）
+1. 先看服务是否正常：`openclaw gateway status`
+2. 再看全局状态：`openclaw status --deep`
+3. 最后看日志定位：`openclaw logs --follow`
+
+## 经验
+- 不要只看配置“看起来对”，升级或改配置后要做一次真实对话验证。
+- 如果只改了配置但效果没变，优先执行一次 `openclaw gateway restart`。
+
+
+# 浏览器自动化
+## 安装MCP
+[MCP](https://github.com/ChromeDevTools/chrome-devtools-mcp)
+- 浏览器访问开启
+```
+chrome://inspect/#remote-debugging
+```
+
+![[自动化.png]]
+
+# opencli
+## 安装
+[地址](https://github.com/jackwener/opencli)
+```bash
+npm install -g @jackwener/opencli
+```
+更新
+```bash
+npm install -g @jackwener/opencli@latest
+```
+
+## 使用
+- 需要解压文件，然后添加到浏览器扩展中去，接着跑下面的命令
+```bash
+opencli doctor
+```
+- 这里需要显示成功才是正常了
+
+==注意两个版本需要一致不然会出现错误==
 
 
 

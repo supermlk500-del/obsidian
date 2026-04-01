@@ -243,18 +243,6 @@ public class TransferService {
 - 术语建议统一：`Spring Framework`、`IoC`、`AOP`、`DispatcherServlet`
 
 ---
-
-## 12. 学习路径建议（按顺序）
-1. IoC / DI（容器和 Bean）
-2. AOP（切面思想）
-3. Spring MVC（请求处理）
-4. 声明式事务
-5. 与 MyBatis / Spring Boot 的整合
-
-> 学完这一版后，你可以继续补一份《Spring MVC 注解速查表》与《事务失效排查清单》。
-
----
-
 ## 13. Spring MVC 补充
 
 ### 13.1 `DispatcherServlet` 的工作流程（务必理解）
@@ -359,13 +347,20 @@ public String search() {
     return "ok";
 }
 ```
-
+### 13.5 获取请求参数方法
+1. 通过`servletapi`获取
+2. 通过控制器方法的形参获取
+3. `@RequestParm`:是将请求参数和控制器方法的形参创建映射关系
+4. `@RequestHeader`:将请求头信息和控制器方法的形参创建映射关系
+5. `@CoookiesValue`:将`cooki`数据和控制器方法的形参创建映射关系
+6. 通过`POJO`获取请求参数(实体类)
+7. 这几个注解都是有三个参数`value`,`required`,`defaultvalue`
 #### 实战建议
 - 类上用 `@RequestMapping("/资源")`，方法上用 `@GetMapping/@PostMapping` 等细分注解。
 - 纯接口项目优先 `@RestController`，避免每个方法都写 `@ResponseBody`。
 - 如果看到“`@RestMapping`”说法，先确认对方实际指的是不是 `@RequestMapping`。
 
-### 13.5 参数绑定和数据校验
+### 13.6 参数绑定和数据校验
 - Spring MVC 支持将请求参数自动绑定到 Java 对象。
 - 配合 `@Valid` + `BindingResult` 可进行参数校验。
 
@@ -379,9 +374,19 @@ public String save(@Valid @RequestBody UserDTO dto, BindingResult br) {
 }
 ```
 
-### 13.5 异常处理（推荐统一处理）
+### 13.7 异常处理（推荐统一处理）
 - 使用 `@RestControllerAdvice + @ExceptionHandler` 统一返回错误信息。
 - 好处：控制器更简洁，错误格式统一。
+
+### 13.8 [域对象共享数据](域对象共享数据.md)
+1. 使用`servletapi`向`requset`域对象共享数据
+2. 使用`modelandview`向`request`域对象共享数据
+3. 使用`model`向`request`域对象共享数据
+4. 使用`map`向`request`域对象共享数据
+5. 使用`modelmap`向`request`域对象共享数据
+6. `model`,`modelmap`,`map`的关系
+7. 向`session`域共享数据
+8. 向`application`域共享数据
 
 ---
 
@@ -681,5 +686,573 @@ public String submit(@Valid @ModelAttribute("userForm") UserForm form,
 
 ### 16.18 一句话总结（面试版）
 - `Thymeleaf` 是 Spring 生态下主流服务端模板引擎，通过 `Model + 视图模板` 完成服务端渲染，语法清晰、与 Spring MVC/Boot 集成成本低，适合需要 SSR 页面的业务系统。
+
+# 17 SpringMVC的视图
+- 当工程引入`jstl`的依赖,转发视图会自动转换为`jstlView`
+- 转发浏览器发送一次请求，另一次在服务器内部
+- 重定向视图浏览器发送两次请求（地址栏路径发生变化）
+
+---
+
+## 22. 静态资源处理
+
+### 22.1 问题背景
+- `DispatcherServlet` 配置 `/` 会拦截静态资源（CSS/JS/图片）
+- 需要配置静态资源放行
+
+### 22.2 方法一：默认 Servlet 处理
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+        configurer.enable();
+    }
+}
+```
+
+### 22.3 方法二：资源映射（推荐）
+```java
+@Override
+public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    registry.addResourceHandler("/static/**")
+            .addResourceLocations("classpath:/static/");
+}
+```
+
+### 22.4 Spring Boot 默认静态资源路径
+- `classpath:/static/`
+- `classpath:/public/`
+- `classpath:/resources/`
+- `classpath:/META-INF/resources/`
+
+---
+
+## 23. 类型转换器和格式化
+
+### 23.1 内置类型转换
+Spring MVC 自动转换基本类型：
+```java
+@GetMapping("/user")
+public String get(@RequestParam Long id, @RequestParam int age) {
+    // String 自动转为 Long 和 int
+    return "ok";
+}
+```
+
+### 23.2 日期格式化
+```java
+@GetMapping("/search")
+public String search(@DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    return "ok";
+}
+```
+
+### 23.3 自定义类型转换器
+```java
+public class StringToUserConverter implements Converter<String, User> {
+    @Override
+    public User convert(String source) {
+        // 自定义转换逻辑
+        String[] parts = source.split(",");
+        User user = new User();
+        user.setId(Long.parseLong(parts[0]));
+        user.setName(parts[1]);
+        return user;
+    }
+}
+```
+
+注册转换器：
+```java
+@Override
+public void addFormatters(FormatterRegistry registry) {
+    registry.addConverter(new StringToUserConverter());
+}
+```
+
+---
+
+## 24. SpringMVC 执行流程详解（面试重点）
+
+### 24.1 完整执行流程
+1. 用户发送请求到 `DispatcherServlet`（前端控制器）
+2. `DispatcherServlet` 调用 `HandlerMapping`（处理器映射器）查找 `Handler`
+3. `HandlerMapping` 返回 `HandlerExecutionChain`（包含处理器和拦截器）
+4. `DispatcherServlet` 调用 `HandlerAdapter`（处理器适配器）执行 `Handler`
+5. `Handler` 执行完成返回 `ModelAndView`
+6. `ViewResolver`（视图解析器）解析视图名称
+7. `View` 渲染视图
+8. 响应返回给用户
+
+### 24.2 核心组件
+- `DispatcherServlet`：前端控制器，统一调度
+- `HandlerMapping`：根据 URL 找到处理器
+- `HandlerAdapter`：适配不同类型的处理器
+- `Handler`：实际处理请求的控制器方法
+- `ViewResolver`：视图解析器
+- `View`：视图对象
+
+### 24.3 一句话总结
+请求 → `DispatcherServlet` → `HandlerMapping` 找处理器 → `HandlerAdapter` 执行 → 返回 `ModelAndView` → `ViewResolver` 解析视图 → 渲染响应
+
+---
+
+## 25. 异常处理（统一异常处理）
+
+### 25.1 局部异常处理
+```java
+@Controller
+public class UserController {
+
+    @ExceptionHandler(Exception.class)
+    public String handleException(Exception e, Model model) {
+        model.addAttribute("error", e.getMessage());
+        return "error";
+    }
+}
+```
+
+### 25.2 全局异常处理（推荐）
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    @ExceptionHandler(Exception.class)
+    public Result<String> handleException(Exception e) {
+        return Result.error(e.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Result<String> handleValidException(MethodArgumentNotValidException e) {
+        String msg = e.getBindingResult().getFieldError().getDefaultMessage();
+        return Result.error("参数校验失败：" + msg);
+    }
+}
+```
+
+### 25.3 自定义业务异常
+```java
+public class BusinessException extends RuntimeException {
+    private int code;
+    
+    public BusinessException(int code, String message) {
+        super(message);
+        this.code = code;
+    }
+}
+```
+
+---
+
+## 26. 数据校验（JSR-303/Hibernate Validator）
+
+### 26.1 常用校验注解
+- `@NotNull`：不能为 null
+- `@NotEmpty`：不能为空（集合、字符串）
+- `@NotBlank`：不能为空白（字符串）
+- `@Size(min, max)`：长度范围
+- `@Min` / `@Max`：数值范围
+- `@Email`：邮箱格式
+- `@Pattern(regexp)`：正则匹配
+
+### 26.2 使用示例
+```java
+public class UserDTO {
+    @NotBlank(message = "用户名不能为空")
+    @Size(min = 3, max = 20, message = "用户名长度 3-20")
+    private String username;
+
+    @NotBlank(message = "密码不能为空")
+    @Size(min = 6, message = "密码至少 6 位")
+    private String password;
+
+    @Email(message = "邮箱格式不正确")
+    private String email;
+}
+```
+
+### 26.3 Controller 中使用
+```java
+@PostMapping("/register")
+public Result<String> register(@Valid @RequestBody UserDTO dto, BindingResult br) {
+    if (br.hasErrors()) {
+        String msg = br.getFieldError().getDefaultMessage();
+        return Result.error(msg);
+    }
+    return Result.success("注册成功");
+}
+```
+
+### 26.4 分组校验
+```java
+public interface Create {}
+public interface Update {}
+
+public class UserDTO {
+    @NotNull(groups = Update.class)
+    private Long id;
+
+    @NotBlank(groups = {Create.class, Update.class})
+    private String username;
+}
+
+@PostMapping("/save")
+public String save(@Validated(Create.class) @RequestBody UserDTO dto) {
+    return "ok";
+}
+```
+
+---
+
+## 27. HttpMessageConverter（消息转换器）
+
+### 27.1 作用
+- 负责 HTTP 请求体和响应体的序列化/反序列化
+- `@RequestBody` 和 `@ResponseBody` 底层依赖它
+
+### 27.2 常见转换器
+- `StringHttpMessageConverter`：处理字符串
+- `MappingJackson2HttpMessageConverter`：处理 JSON（依赖 Jackson）
+- `FormHttpMessageConverter`：处理表单数据
+
+### 27.3 自定义消息转换器
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // 自定义 JSON 转换器
+        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        converter.setObjectMapper(mapper);
+        converters.add(0, converter);
+    }
+}
+```
+
+---
+
+## 28. 视图解析器配置
+
+### 28.1 InternalResourceViewResolver（JSP）
+```java
+@Bean
+public InternalResourceViewResolver viewResolver() {
+    InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+    resolver.setPrefix("/WEB-INF/views/");
+    resolver.setSuffix(".jsp");
+    return resolver;
+}
+```
+
+### 28.2 ThymeleafViewResolver（Thymeleaf）
+Spring Boot 自动配置，手动配置示例：
+```java
+@Bean
+public ThymeleafViewResolver thymeleafViewResolver(SpringTemplateEngine templateEngine) {
+    ThymeleafViewResolver resolver = new ThymeleafViewResolver();
+    resolver.setTemplateEngine(templateEngine);
+    resolver.setCharacterEncoding("UTF-8");
+    return resolver;
+}
+```
+
+---
+
+## 29. 重定向和转发
+
+### 29.1 转发（Forward）
+```java
+@GetMapping("/forward")
+public String forward() {
+    return "forward:/user/list";  // 服务器内部跳转
+}
+```
+
+### 29.2 重定向（Redirect）
+```java
+@GetMapping("/redirect")
+public String redirect() {
+    return "redirect:/user/list";  // 浏览器重新请求
+}
+```
+
+### 29.3 区别总结
+- 转发：一次请求，地址栏不变，可共享 request 数据
+- 重定向：两次请求，地址栏改变，不共享 request 数据
+
+---
+
+## 30. 常见面试题总结
+
+### 30.1 SpringMVC 执行流程？
+请求 → DispatcherServlet → HandlerMapping 查找处理器 → HandlerAdapter 执行 → 返回 ModelAndView → ViewResolver 解析 → 渲染视图 → 响应
+
+### 30.2 拦截器和过滤器的区别？
+- 拦截器属于 Spring MVC，过滤器属于 Servlet
+- 拦截器只拦截 Controller，过滤器拦截所有请求
+- 拦截器可访问 Spring 容器，过滤器不方便
+
+### 30.3 如何解决跨域问题？
+- `@CrossOrigin` 注解
+- 全局 CORS 配置
+- 使用 CorsFilter
+
+### 30.4 如何处理文件上传？
+使用 `MultipartFile` 接收文件，配置文件大小限制
+
+### 30.5 如何统一异常处理？
+使用 `@RestControllerAdvice` + `@ExceptionHandler`
+
+### 30.6 `@RequestParam` 和 `@PathVariable` 区别？
+- `@RequestParam`：获取查询参数（?id=1）
+- `@PathVariable`：获取路径参数（/user/1）
+
+### 30.7 如何实现参数校验？
+使用 `@Valid` 或 `@Validated` + JSR-303 注解
+
+---
+
+## 31. 最佳实践建议
+
+1. **Controller 职责单一**：只做参数接收、调用 Service、返回结果
+2. **统一响应格式**：使用 Result 包装返回数据
+3. **统一异常处理**：使用全局异常处理器
+4. **参数校验**：使用 JSR-303 注解校验
+5. **RESTful 规范**：遵循 REST 设计原则
+6. **日志记录**：使用 AOP 或拦截器记录请求日志
+7. **接口文档**：使用 Swagger/Knife4j 生成文档
+8. **版本控制**：API 加版本号（/api/v1/users）
+
+---
+
+## 32. Spring MVC 与 Spring Boot 对比
+
+| 特性 | Spring MVC | Spring Boot |
+|------|-----------|-------------|
+| 配置方式 | XML 或 Java Config | 自动配置 |
+| 启动方式 | 需要外部容器（Tomcat） | 内嵌容器 |
+| 依赖管理 | 手动管理 | Starter 依赖 |
+| 开发效率 | 较低 | 高 |
+| 适用场景 | 传统项目 | 现代微服务 |
+
+**总结**：Spring Boot 是 Spring MVC 的增强版，简化了配置和部署。
+
+---
+
+## 33. 补充：Spring MVC 注解速查表
+
+| 注解 | 作用 |
+|------|------|
+| `@Controller` | 标识控制器 |
+| `@RestController` | `@Controller` + `@ResponseBody` |
+| `@RequestMapping` | 映射请求路径 |
+| `@GetMapping` | GET 请求映射 |
+| `@PostMapping` | POST 请求映射 |
+| `@PutMapping` | PUT 请求映射 |
+| `@DeleteMapping` | DELETE 请求映射 |
+| `@RequestParam` | 获取请求参数 |
+| `@PathVariable` | 获取路径变量 |
+| `@RequestBody` | 接收请求体（JSON） |
+| `@ResponseBody` | 返回响应体 |
+| `@ModelAttribute` | 绑定模型属性 |
+| `@SessionAttribute` | 获取 Session 属性 |
+| `@CookieValue` | 获取 Cookie 值 |
+| `@RequestHeader` | 获取请求头 |
+| `@CrossOrigin` | 跨域配置 |
+| `@ExceptionHandler` | 异常处理 |
+| `@RestControllerAdvice` | 全局异常处理 |
+| `@Valid` / `@Validated` | 参数校验 |
+
+---
+
+**笔记完成！涵盖 Spring MVC 核心知识点，适合面试和实战。**
+
+---
+
+## 19. 拦截器（Interceptor）（高频考点）
+
+### 19.1 拦截器是什么
+- 拦截器用于在请求处理前后执行自定义逻辑
+- 常见场景：登录校验、权限检查、日志记录、性能监控
+
+### 19.2 拦截器 vs 过滤器
+| 特性 | 拦截器（Interceptor） | 过滤器（Filter） |
+|------|---------------------|-----------------|
+| 归属 | Spring MVC | Servlet 规范 |
+| 拦截范围 | Controller 方法 | 所有请求 |
+| 执行时机 | DispatcherServlet 之后 | DispatcherServlet 之前 |
+| 访问 Spring 容器 | 可以 | 不方便 |
+
+### 19.3 自定义拦截器
+```java
+public class LoginInterceptor implements HandlerInterceptor {
+
+    @Override
+    public boolean preHandle(HttpServletRequest request, 
+                           HttpServletResponse response, 
+                           Object handler) throws Exception {
+        // 请求处理前执行
+        HttpSession session = request.getSession();
+        if (session.getAttribute("user") == null) {
+            response.sendRedirect("/login");
+            return false; // 拦截
+        }
+        return true; // 放行
+    }
+
+    @Override
+    public void postHandle(HttpServletRequest request, 
+                          HttpServletResponse response, 
+                          Object handler, 
+                          ModelAndView modelAndView) throws Exception {
+        // Controller 方法执行后、视图渲染前执行
+    }
+
+    @Override
+    public void afterCompletion(HttpServletRequest request, 
+                               HttpServletResponse response, 
+                               Object handler, 
+                               Exception ex) throws Exception {
+        // 视图渲染后执行（常用于资源清理）
+    }
+}
+```
+
+### 19.4 注册拦截器
+```java
+@Configuration
+public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")           // 拦截所有
+                .excludePathPatterns("/login", "/static/**"); // 排除路径
+    }
+}
+```
+
+### 19.5 拦截器执行顺序
+- 多个拦截器按注册顺序执行
+- `preHandle`：顺序执行
+- `postHandle` 和 `afterCompletion`：逆序执行
+
+---
+
+## 20. 文件上传下载（实际应用）
+
+### 20.1 文件上传配置
+```yml
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 50MB
+```
+
+### 20.2 单文件上传
+```java
+@PostMapping("/upload")
+public String upload(@RequestParam("file") MultipartFile file) throws IOException {
+    if (file.isEmpty()) {
+        return "文件为空";
+    }
+    
+    String filename = file.getOriginalFilename();
+    String path = "/uploads/" + filename;
+    file.transferTo(new File(path));
+    
+    return "上传成功：" + filename;
+}
+```
+
+### 20.3 多文件上传
+```java
+@PostMapping("/batch-upload")
+public String batchUpload(@RequestParam("files") MultipartFile[] files) {
+    for (MultipartFile file : files) {
+        if (!file.isEmpty()) {
+            // 保存文件
+        }
+    }
+    return "批量上传成功";
+}
+```
+
+### 20.4 文件下载
+```java
+@GetMapping("/download/{filename}")
+public ResponseEntity<Resource> download(@PathVariable String filename) throws IOException {
+    Path path = Paths.get("/uploads/" + filename);
+    Resource resource = new UrlResource(path.toUri());
+    
+    return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, 
+                   "attachment; filename=\"" + filename + "\"")
+            .body(resource);
+}
+```
+
+### 20.5 文件上传最佳实践
+- 校验文件类型和大小
+- 重命名文件（UUID + 原扩展名）
+- 分目录存储（按日期/用户）
+- 大文件考虑分片上传
+- 敏感文件做访问权限控制
+
+---
+
+## 21. 跨域处理（CORS）（前后端分离必备）
+
+### 21.1 什么是跨域
+- 浏览器同源策略限制：协议、域名、端口任一不同即为跨域
+- 前后端分离项目常见问题
+
+### 21.2 方法一：`@CrossOrigin` 注解
+```java
+@RestController
+@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
+public class ApiController {
+    // ...
+}
+```
+
+### 21.3 方法二：全局配置（推荐）
+```java
+@Configuration
+public class CorsConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:3000")
+                .allowedMethods("GET", "POST", "PUT", "DELETE")
+                .allowedHeaders("*")
+                .allowCredentials(true)
+                .maxAge(3600);
+    }
+}
+```
+
+### 21.4 方法三：过滤器方式
+```java
+@Bean
+public CorsFilter corsFilter() {
+    CorsConfiguration config = new CorsConfiguration();
+    config.addAllowedOrigin("*");
+    config.addAllowedMethod("*");
+    config.addAllowedHeader("*");
+    
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", config);
+    
+    return new CorsFilter(source);
+}
+```
 
 
