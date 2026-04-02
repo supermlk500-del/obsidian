@@ -140,3 +140,12 @@
 ## 反馈和帮助
 
 - 问题反馈：https://github.com/anthropics/claude-code/issues
+
+使用中转站开源在环境变量里面配置令牌和网址
+如下
+
+```bash
+echo 'export ANTHROPIC_AUTH_TOKEN="你的API密钥"' >> ~/.zshrc
+echo 'export ANTHROPIC_BASE_URL="base-url"' >> ~/.zshrc
+source ~/.zshrc
+```
