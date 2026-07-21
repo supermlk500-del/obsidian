@@ -13,6 +13,14 @@
 然后在`https://payurl.ark2.cn/`中生成支付连接
 进入长链接的支付连接，一定是选择paypal，注意点击订阅后要在这个页面注册一个新的paypal账号
 ![[paypal.png]]
+```txt
+1621 Elswick Lane,Charlotte,28214 
+7714 Legacy Ln, Orlando, FL 32818 
+2922 E Le Marche Ave, Phoenix, AZ 85032 
+1586 29th Ave, San Francisco, CA 94122 
+2671 Clayton Oaks Dr, Dallas, TX 75227 
+1621 elswick ln,Charlotte,28214
+```
 这里不要用自己的账号，随便输入一个乱的邮箱也行
 ![[注册.png]]
 这里需要能接paypal的验证吗的号码

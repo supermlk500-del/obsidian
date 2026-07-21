@@ -4,35 +4,35 @@
     "type": "split",
     "children": [
       {
-        "id": "7ac4c86b8ca22dd9",
+        "id": "26c0ed1e29a083d9",
         "type": "tabs",
         "children": [
           {
-            "id": "867e635b60d7631f",
+            "id": "c9e6fbe012442a17",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "工具/Git笔记.md",
+                "file": "测试/jenkins.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Git笔记"
+              "title": "jenkins"
             }
           },
           {
-            "id": "761de17e3b77be1a",
+            "id": "c115ebd7d381df70",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "工具/gptplus.md",
+                "file": "测试/自动化.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "gptplus"
+              "title": "自动化"
             }
           }
         ],
@@ -109,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "java/Spring/SpringMVC.md",
+                "file": "测试/自动化.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -119,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "SpringMVC 的反向链接列表"
+              "title": "自动化 的反向链接列表"
             }
           },
           {
@@ -128,12 +128,12 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "java/Spring/SpringMVC.md",
+                "file": "测试/自动化.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "SpringMVC 的出链列表"
+              "title": "自动化 的出链列表"
             }
           },
           {
@@ -157,21 +157,31 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "工具/gptplus.md",
-                "followCursor": false,
-                "showSearch": false,
+                "file": "测试/自动化.md",
+                "followCursor": true,
+                "showSearch": true,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "gptplus 的大纲"
+              "title": "自动化 的大纲"
+            }
+          },
+          {
+            "id": "5c846eb791d15139",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
             }
           }
         ],
-        "currentTab": 3
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 291.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -186,38 +196,52 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "ad504360634c64e2",
+  "active": "c115ebd7d381df70",
   "lastOpenFiles": [
-    "工具/images/结果.png",
-    "工具/images/号码.png",
-    "工具/images/注册.png",
-    "工具/gptplus.md",
-    "工具/images/paypal.png",
-    "工具/images/指纹浏览器.png",
-    "工具/images/住宅.png",
-    "工具/images/卡.png",
-    "工具/images/第一步.png",
     "工具/Git笔记.md",
-    "project/排产质检系统/源码理解.md",
-    "project/排产质检系统",
-    "project",
-    "工具/Git笔记.md.tmp.22820.0f0f9aadcbdf",
-    "前端联调接口说明.md",
-    "织慧通系统开发顺序建议.md",
-    "ai/Antigravity.md",
-    "论文修改清单.md",
-    "口语化语句修改清单.md",
-    "第二章模型设定修改及问题检查.md",
-    "第四章修改建议.md",
-    "三省六部.md",
-    "统计建模大赛/工作/步骤.md",
-    "生成式AI与内容营销对电商消费升级影响的调查问卷_完整作业.md",
-    "未命名.base",
-    "统计建模大赛/工作/论文修改对照表.md",
-    "java/Spring/SpringMVC.md",
-    "java/Spring/SpringBoot.md",
-    "java/javaEE/笔记.md",
-    "统计建模大赛/工作/分工.md",
-    "测试/测试理论.md"
+    "测试/自动化.md.tmp.2544.c703d32c5d13",
+    "测试/jenkins.md",
+    "测试/自动化.md",
+    "测试/自动化.md.tmp.30988.a746d863061b",
+    "测试/自动化.md.tmp.30988.aa9eee2522e8",
+    "测试/自动化.md.tmp.25588.7e9d02eddce3",
+    "测试/自动化.md.tmp.25588.b0d27435e658",
+    "测试/面试（一般步骤，先从自己，再从外界，然后他人，最后集体）.md",
+    "测试/元素定位.md.tmp.33128.19149cab0cb6",
+    "测试/元素定位.md.tmp.17872.24673cb0af68",
+    "ai/Claude命令大全.md",
+    "ai/Claude命令大全.md.tmp.26776.c577d9a6bed4",
+    "工具/WSL2_Docker_CPA_CPAMP_部署笔记.md",
+    "工具/WSL2_Docker_CPA_CPAMP_完整部署与踩坑笔记.md",
+    "工具/WSL2_Docker_CPA_CPAMP_部署笔记_精简正确版.md",
+    "工具/images/容器访问 Windows 7890 代理成功.png",
+    "工具/images/WSL 网络恢复后的检查结果.png",
+    "工具/images/OAuth 回调页面连接被拒绝.png",
+    "images/16-submit-callback-url.png.md",
+    "images",
+    "工具/images/手动提交 Codex OAuth 回调 URL.png",
+    "工具/images/CPA 与 CPAMP 容器状态.png",
+    "前端/笔记.md",
+    "工具/Docker.md",
+    "工具/images/查看宿主机nginx.png",
+    "工具/images/wsl网络.png",
+    "工具/images/参数选择.png",
+    "测试/测试工具/images/搜索upload.png",
+    "工具/images/WSL 镜像网络和自动代理设置.png",
+    "测试/网络基础.md",
+    "测试/数据库笔记.md",
+    "工具/wsl➕clipoxy.md",
+    "java/基础学习/韩顺平java.md",
+    "测试/测试工具/Fiddler.md",
+    "python/python数据结构和算法.md",
+    "测试/测试工具/apipost使用注意.md",
+    "python/核心算法学习/速成.md",
+    "ai/AstrBot.md",
+    "工具/codex显示问题.md",
+    "AndroidStudio/资源管理.md",
+    "AndroidStudio/课程笔记.md",
+    "ai/claude code.md",
+    "ai/Gemini.md",
+    "project/mlkspace/images"
   ]
 }

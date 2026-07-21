@@ -415,6 +415,8 @@ CMD ["node", "app.js"]
 
 ### build — 构建镜像
 
+- 构建镜像就是根据 Dockerfile 和项目文件，制作一个可以运行应用的 Docker 镜像
+
 ```bash
 docker build -t 镜像名:版本号 .
 docker build -t my-app:1.0 .    # 在当前目录构建，. 表示 Dockerfile 所在位置

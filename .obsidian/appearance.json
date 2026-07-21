@@ -1,6 +1,6 @@
 {
-  "theme": "moonstone",
-  "cssTheme": "Minimal",
+  "theme": "system",
+  "cssTheme": "Blue Topaz",
   "showViewHeader": true,
   "accentColor": "#e90101"
 }

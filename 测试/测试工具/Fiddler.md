@@ -82,4 +82,12 @@
 
 
 
+## 弱网
+![[弱网设置.png]]
+
+在rules中找到自定义rulles
+
+![[搜索upload.png]]
+ctrl加f找upload就能找到网络的上行和下行的速度设置
+
 
