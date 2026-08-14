@@ -1,554 +1,239 @@
 # Claude Code 命令大全
 
-> 最后更新：2026-07-15
+> 最后更新：2026-08-05
 > 适用版本：Claude Code（CLI / 桌面应用 / Web / IDE 扩展）
 
 ---
 
-## 一、启动与 CLI 参数
+## 一、核心基础命令（重点）
 
-### 安装
+### 1. 终端启动与会话管理（CLI 命令行）
+
+在操作系统终端（Terminal / PowerShell / Git Bash）中直接运行：
+
+#### 常用启动命令
+
+| 命令 | 简写 / 缩写 | 完整写法 | 作用说明与适用场景 |
+|------|-------------|----------|-------------------|
+| **启动会话** | `claude` | `claude` | 进入交互式 REPL 模式（最基础用法） |
+| **恢复上次** | `claude -c` | `claude --continue` | **继续上一次会话**（自动载入当前目录最近一次对话历史与上下文） |
+| **恢复指定** | `claude -r [id]` | `claude --resume [id/搜索词]` | **恢复历史会话**（若带 ID 则直接恢复；若不带或带搜索词则打开交互选择列表） |
+| **命名启动** | `claude -n <名称>` | `claude --name <会话名>` | **直接为新会话命名启动**（名称会同步显示在终端标题与 `/resume` 列表中） |
+| **带提示词启动** | `claude "问题"` | `claude "你的问题"` | 进入交互模式并立即自动发送第一条提示词 |
+| **单次非交互** | `claude -p "问题"` | `claude --print "你的问题"` | **Print 模式**（生成答案后立即退出终端，不进入交互，适合 Shell 脚本/管道） |
+| **指定模型启动** | `claude -m <模型>` | `claude --model <model>` | 指定启动模型（如 `claude -m opus` 或 `claude -m sonnet`） |
+| **后台 Agent 启动** | `claude --bg "任务"` | `claude --background "任务"` | **后台运行模式**（启动异步 Agent 执行任务并立即返回终端） |
+| **Git 隔离工作树** | `claude -w [名称]` | `claude --worktree [name]` | **在独立 Git Worktree 中启动**（防止对当前主工作区造成污染） |
+
+---
+
+#### CLI 管理子命令
+
+| 子命令 | 命令语法 | 作用说明与使用示例 |
+|--------|----------|-------------------|
+| **配置管理** | `claude config` | 查看、获取、设置或删除全局与项目配置 |
+| **环境诊断** | `claude doctor` | 健康检查（排查 Node 版本、网络连接、API 密钥、代理、权限等） |
+| **软件升级** | `claude update` | 将 Claude Code CLI 升级到最新版本（或 `claude upgrade`） |
+| **后台 Agent 管理** | `claude agents` | 列出与管理后台运行的 Agent 任务（支持 `--json` 查看结构化列表） |
+| **MCP 服务器管理** | `claude mcp` | 管理 MCP 扩展工具服务器（下有 `list`/`add`/`remove`/`login` 等子命令） |
+| **插件生态管理** | `claude plugin` | 管理社区与本地插件（下有 `list`/`install`/`uninstall`/`enable` 等子命令） |
+| **多 Agent 云端审查** | `claude ultrareview` | 针对当前分支或 PR 运行云端多 Agent 深度代码审查 |
+| **外部配置导入** | `claude import` | 自动从 Cursor / Trae 等其他 AI 工具中导入配置 |
+| **账号认证管理** | `claude auth` | 管理登录与凭证（`claude login` 登录 / `claude logout` 退出） |
+
+---
+
+#### 常用 CLI 高级参数标志（Flags）
+
+| 参数标志 | 缩写 / 示例 | 说明与适用场景 |
+|----------|-------------|----------------|
+| `--name <name>` | `-n "修复登录Bug"` | 设置会话自定义显示名称 |
+| `--effort <level>` | `--effort high` | 设置推理思考深度（可选：`low`, `medium`, `high`, `xhigh`, `max`） |
+| `--permission-mode <mode>` | `--permission-mode auto` | 设置权限询问模式（`manual`, `auto`, `acceptEdits`, `dontAsk`, `plan`, `bypassPermissions`） |
+| `--dangerously-skip-permissions` | `--dangerously-skip-permissions` | **跳过所有权限询问弹窗**（极其危险！仅限在安全隔离的 CI/CD 容器中使用） |
+| `--allowedTools <tools>` | `--allowedTools "Bash(git *),Read"` | 允许使用的工具白名单（支持正则模糊匹配） |
+| `--disallowedTools <tools>` | `--disallowedTools "Edit,Write"` | 禁止使用的工具黑名单 |
+| `--safe-mode` | `--safe-mode` | **故障排查模式**：禁用所有 CLAUDE.md、技能、插件和 MCP 服务器，纯干净启动 |
+| `--bare` | `--bare` | **极简模式**：跳过钩子、LSP、自动记忆和 CLAUDE.md，适合纯自动化脚本 |
+| `--max-budget-usd <amount>` | `--max-budget-usd 5.0` | 设置本次运行的消费上限金额（美元），超限自动停止（结合 `-p` 使用） |
+| `--mcp-config <path>` | `--mcp-config ./mcp.json` | 额外指定加载的 MCP 服务器配置文件 |
+| `--add-dir <path>` | `--add-dir ../other-project` | 额外引入并授权 Claude 访问的其他项目目录 |
+| `--output-format <format>` | `--output-format json` | 指定输出格式（仅限 `-p` 模式：`text`, `json`, `stream-json`） |
+| `--max-turns <n>` | `--max-turns 10` | 限制最大对话轮数，防止脚本无限循环 |
+| `--verbose` | `--verbose` | 开启详细调试日志输出 |
+
+---
+
+### 2. 会话内部斜杠命令（REPL 实时控制命令）
+
+在 `claude` 交互式会话界面中，在输入框中以 `/` 开头输入：
+
+#### 基础会话与控制
+
+| 斜杠命令 | 语法示例 | 作用与使用场景 |
+|----------|----------|----------------|
+| `/help` | `/help` | 显示帮助菜单、快捷键及当前可用命令列表 |
+| `/clear` | `/clear` | **清空当前会话**（重置上下文历史，开启新对话，不退出应用） |
+| `/compact` | `/compact` | **压缩/总结上下文**（对话太长消耗 token 时，让 Claude 总结前期对话并释放窗口） |
+| `/resume` | `/resume [id]` | **恢复/切换会话**（在会话内交互式选择或直接恢复指定的历史对话） |
+| `/rename` | `/rename <新名称>` | **重命名当前会话**（修改当前 Session 的显示名称，在标签页与历史恢复列表中生效） |
+| `/cost` | `/cost` | **查看 Token 消耗与费用**（显示当前 Session 的 Input/Output Token 数及预估金额） |
+| `/config` | `/config` | **交互式设置界面**（实时调整主题、模型、提示方式、权限等） |
+| `/quit` 或 `/exit` | `/quit` | **退出 Claude Code** |
+| `/doctor` | `/doctor` | 在会话内实时运行环境与网络健康诊断 |
+| `/bug` | `/bug` | 向 Anthropic 提交 Bug 反馈 |
+
+#### 模型与性能切换
+
+| 斜杠命令 | 语法 / 示例 | 作用说明与适用场景 |
+|----------|-------------|-------------------|
+| `/model` | `/model` | **查看与选择模型**：打开交互式模型与推理强度（Effort）选择菜单 |
+| `/model <名称>` | `/model opus`<br>`/model sonnet`<br>`/model haiku`<br>`/model <model-id>` | **直接切换模型**：快速指定切换到目标模型（如 `opus`、`sonnet`、`haiku` 或具体模型 ID） |
+| `/fast` | `/fast` | **Fast Mode（快速模式）**：切换 Fast 极速输出模式（开启/关闭切换） |
+
+#### 任务、工具与隔离环境
+
+| 斜杠命令 | 作用说明 |
+|----------|----------|
+| `/init` | **生成 `CLAUDE.md`**（自动分析代码库并创建项目规范与说明文件） |
+| `/tasks` | **查看后台任务**（查看正在后台运行的 Agent、Shell 进程或自动化任务状态） |
+| `/workflows` | **查看工作流**（查看正在运行的多 Agent 编排工作流进度） |
+| `/worktree` | **创建 Git 工作树**（在隔离的 Git Worktree 中进行试验性开发，不污染主分支） |
+| `/mcp` | **管理 MCP 服务**（在会话内查看或重新连接外部 MCP 工具服务器） |
+| `/memory` | **查看与管理记忆**（打开保存的持久记忆文件） |
+| `/remember <内容>` | 强制 Claude 记住规则或偏好（写回项目/用户持久记忆） |
+| `/forget <内容>` | 删除指定的历史记忆 |
+
+---
+
+### 3. 会话内输入技巧与按键
+
+#### 对话输入快捷键
+
+- `Enter`：发送消息
+- `Shift + Enter`：**换行**（多行输入）
+- `Ctrl + C`：**中断/取消**当前操作或代码生成
+- `Ctrl + D`：**快速退出**（等同于 `/quit`）
+- `Escape`：取消当前输入 / 中断运行
+- `↑` / `↓`：翻阅历史输入的命令
+- `Tab`：补全文件名、路径、命令
+
+#### 权限询问控制（弹窗时按键）
+
+当 Claude 尝试编辑文件或运行 Shell 命令提示确认时：
+- `y`：同意本次执行
+- `n`：拒绝本次执行
+- `a`：**本次会话内始终允许**同类操作（如以后允许所有读取/写入）
+
+#### 在对话中执行本地命令 (`!`)
+
+在提示符中输入 `!` 开头的命令直接运行 Shell，结果自动作为上下文交给 Claude：
+```bash
+! git status                  # 查看代码状态
+! npm test                    # 运行单元测试
+! gcloud auth login           # 交互式登录认证
+```
+
+#### 管道处理文本 (Pipeline)
 
 ```bash
-npm install -g @anthropic-ai/claude-code
+cat build.log | claude -p "分析构建失败的原因"
+git diff | claude -p "生成 Git 提交日志"
 ```
 
-### 基本启动
+#### IDE 扩展中的上下文引用标记 (`#`)
+
+在 IDE 插件 / 扩展中使用：
+- `#File` / `#Folder`：引用指定文件/文件夹
+- `#Codebase`：全项目索引检索
+- `#Problems`：引用 IDE 诊断面板中的报错和 Warning
+- `#Terminal`：引用 IDE 内置终端输出
+- `#Git Diff`：引用未提交的代码变更
+
+---
+
+## 二、高级扩展技能与插件命令（Skills & Plugins）
+
+通过 `/技能名` 或 `claude plugin` 调用的增强扩展功能：
+
+### 1. 常用扩展技能（Skills）
+
+| 技能命令 | 类别 | 作用说明 |
+|----------|------|----------|
+| `/code-review` | 代码质量 | 审查当前代码改动（支持 `--fix` 自动修复、`--comment` 发布 PR 评论） |
+| `/simplify` | 代码质量 | 审查并精简代码，重构冗余逻辑，提升执行效率 |
+| `/security-review` | 代码质量 | 针对代码改动进行安全漏洞扫描与防御审查 |
+| `/verify` | 开发调试 | 端到端运行并驱动应用程序，验证改动是否真正生效 |
+| `/run` | 开发调试 | 自动识别并启动当前项目的 App / 开发服务器 |
+| `/loop [间隔] [命令]` | 自动化 | 循环定时运行（如 `/loop 5m /code-review` 每 5 分钟自动审核） |
+| `/fewer-permission-prompts` | 配置优化 | 扫描历史记录，自动生成白名单配置以减少频繁弹窗 |
+| `/keybindings-help` | 配置优化 | 配置自定义快捷键绑定 |
+| `/deep-research <主题>` | 检索研究 | 启动多源并发联网搜索与交叉验证，生成带参考文献的专业报告 |
+| `/claude-api` | 检索研究 | 查询 Anthropic API / SDK 最新开发参考手册（参数、模型 ID、流式传输等） |
+| `/frontend-design` | 前端设计 | 生产级前端页面与组件设计与代码生成 |
+| `/ui-ux-pro-max` | 前端设计 | 包含 50+ 风格、161 配色的 UI/UX 全套设计指南 |
+| `/dataviz` | 前端设计 | 专业图表、仪表板与数据可视化设计 |
+| `/interaction-design` | 前端设计 | 微交互、动效与过渡动画设计 |
+| `/find-skills` | 技能管理 | 查找并安装社区与本地新技能 |
+| `/skill-creator` | 技能管理 | 创建新技能、编辑技能及测试评估 |
+
+---
+
+### 2. CLI 插件管理常用命令（`claude plugin`）
 
 ```bash
-claude                    # 交互式 REPL 模式
-claude "你的问题"          # 单次提问（非交互）
-claude -p "你的问题"       # Print 模式：只输出结果，不进入 REPL
-claude -c                 # 继续上一次会话
-claude -r <session-id>    # 恢复指定会话
+claude plugin list                 # 列出已安装的所有插件
+claude plugin install <名称>       # 从 Marketplace 安装指定插件
+claude plugin uninstall <名称>     # 卸载已安装的插件
+claude plugin enable <名称>        # 启用插件
+claude plugin disable <名称>       # 禁用插件
+claude plugin update <名称>        # 升级插件至最新版本
+claude plugin init <名称>          # 脚手架初始化新建一个本地插件
 ```
 
-### CLI 常用参数
+---
 
-| 参数 | 说明 |
-|------|------|
-| `--help`, `-h` | 显示帮助信息 |
-| `--version`, `-v` | 显示版本号 |
-| `--model`, `-m <model>` | 指定使用的模型（如 `claude-opus-4-8`） |
-| `--print`, `-p` | Print 模式：非交互式输出结果后退出 |
-| `--continue`, `-c` | 继续上一次会话 |
-| `--resume`, `-r <id>` | 恢复指定 session ID 的会话 |
-| `--output-format <fmt>` | 输出格式：`text`（默认）、`json`、`stream-json` |
-| `--max-turns <n>` | 限制最大对话轮数（非交互模式下有用） |
-| `--system-prompt <text>` | 自定义系统提示（仅在 `--print` 模式可用） |
-| `--allowedTools <tools>` | 允许使用的工具列表（逗号分隔） |
-| `--disallowedTools <tools>` | 禁止使用的工具列表 |
-| `--permission-mode <mode>` | 权限模式：`default`、`plan`、`auto-accept` |
-| `--dangerously-skip-permissions` | 跳过所有权限提示（**危险，仅限 CI/脚本**） |
-| `--verbose` | 显示详细日志 |
-| `--no-markdown` | 禁用 Markdown 渲染 |
-| `--input-format <fmt>` | 输入格式：`text`（默认）、`stream-json` |
-| `--mcp-config <path>` | 指定 MCP 配置文件路径 |
-| `--add-dir <path>` | 添加额外的工作目录 |
-
-### 管理子命令
+### 3. MCP 工具服务常用命令（`claude mcp`）
 
 ```bash
-claude config             # 管理配置（get/set/list/remove）
-claude mcp                # 管理 MCP 服务器（add/remove/list）
-claude doctor             # 诊断安装与配置问题
-claude update             # 更新 Claude Code 到最新版本
-claude login              # 登录 Anthropic 账户
-claude logout             # 退出登录
+claude mcp list                    # 查看当前配置的所有 MCP 服务器
+claude mcp add <名称> <命令/URL>    # 添加新的 MCP 服务器（支持 stdio 和 HTTP/SSE）
+claude mcp remove <名称>           # 移除 MCP 服务器
+claude mcp get <名称>              # 查看指定 MCP 服务器的健康状态与详细信息
+claude mcp login <名称>            # 为需要 OAuth 认证的 MCP 服务登录鉴权
 ```
 
 ---
 
-## 二、交互式命令（斜杠命令）
+## 三、配置与架构规范
 
-### 会话控制
+### 1. CLAUDE.md 项目规范文件
 
-| 命令 | 说明 |
-|------|------|
-| `/help` | 显示帮助信息和可用命令 |
-| `/quit` 或 `/exit` | 退出 Claude Code |
-| `/clear` | 清除当前会话历史 |
-| `/compact` | 压缩对话上下文（将之前的对话总结以节省 token） |
-| `/cost` | 显示当前会话的 token 使用量和费用 |
-| `/config` | 打开配置界面（主题、模型等简单设置） |
-| `/doctor` | 诊断安装和配置问题 |
-| `/login` | 登录 Anthropic 账户 |
-| `/logout` | 退出登录 |
-| `/tasks` | 查看后台任务列表和状态 |
-| `/workflows` | 查看正在运行的工作流进度 |
+- **位置**：`<项目根目录>/CLAUDE.md` 或 `~/.claude/CLAUDE.md`（全局）
+- **作用**：让 Claude 启动即了解项目背景、规范、构建命令与约束条件
 
-### 模型切换
+### 2. 配置层级（优先级从高到低）
 
-| 命令 | 说明 |
-|------|------|
-| `/model <name>` | 切换到指定模型 |
-| `/opus` | 切换到 Claude Opus 4.8（最强大的推理模型） |
-| `/sonnet` | 切换到 Claude Sonnet 5（平衡性能与速度） |
-| `/haiku` | 切换到 Claude Haiku 4.5（最快速响应） |
-| `/fast` | 切换快速模式（同模型，更快输出；Opus 4.8/4.7 可用） |
-
-### 记忆系统
-
-| 命令 | 说明 |
-|------|------|
-| `/memory` | 查看和管理 Claude 的记忆 |
-| `/remember <内容>` | 明确要求 Claude 记住某些信息 |
-| `/forget <内容>` | 要求 Claude 忘记某些信息 |
-
-### 项目初始化
-
-| 命令 | 说明 |
-|------|------|
-| `/init` | 初始化 CLAUDE.md 文件，自动生成项目文档 |
+1. `<项目>/.claude/settings.local.json` （本地个人配置，不提交 git）
+2. `<项目>/.claude/settings.json` （项目共享配置，提交 git）
+3. `~/.claude/settings.json` （全局用户配置）
 
 ---
 
-## 三、技能命令（Skills）
+## 四、环境变量配置（代理与中转站）
 
-技能是可扩展的高级功能，通过 `/` 命令调用。
-
-### 代码质量与审查
-
-| 命令 | 说明 |
-|------|------|
-| `/code-review` | 审查当前 diff 的代码质量（支持 `--fix` 自动修复、`--comment` 发 PR 评论） |
-| `/simplify` | 审查修改的代码，检查复用性、简化和效率，并自动修复 |
-| `/security-review` | 对当前分支的更改进行安全审查 |
-| `/verify` | 端到端验证代码更改是否真正生效（运行而非仅测试） |
-
-### 代码运行与测试
-
-| 命令 | 说明 |
-|------|------|
-| `/run` | 启动并运行项目的应用（查看更改是否生效） |
-
-### Git 与 PR
-
-| 命令 | 说明 |
-|------|------|
-| `/review` | 审查 GitHub Pull Request |
-
-### 研究与探索
-
-| 命令 | 说明 |
-|------|------|
-| `/deep-research` | 深度研究：多源搜索、交叉验证、生成带引用的报告 |
-
-### API 与开发
-
-| 命令 | 说明 |
-|------|------|
-| `/claude-api` | Claude API / Anthropic SDK 参考（模型 ID、定价、参数、流式、工具使用等） |
-
-### 配置与自动化
-
-| 命令 | 说明 |
-|------|------|
-| `/update-config` | 配置 settings.json（Hooks、权限、环境变量等） |
-| `/loop [间隔] [命令]` | 按定时间隔运行提示或命令。示例：`/loop 5m /code-review` |
-| `/fewer-permission-prompts` | 扫描历史记录，自动添加常用只读命令的白名单以减少权限弹窗 |
-| `/keybindings-help` | 自定义键盘快捷键配置 |
-
-### UI / 前端设计
-
-| 命令 | 说明 |
-|------|------|
-| `/frontend-design` | 创建高质量、生产级的前端界面 |
-| `/ui-ux-pro-max` | UI/UX 设计（50+ 风格、161 配色、57 字体配对、25 图表类型等） |
-| `/interaction-design` | 微交互、动效设计、过渡动画、用户反馈模式 |
-| `/dataviz` | 数据可视化（图表、仪表板、配色方案） |
-
-### 技能管理
-
-| 命令 | 说明 |
-|------|------|
-| `/find-skills` | 发现和安装新技能 |
-| `/skill-creator` | 创建新技能、编辑现有技能、运行评估 |
-
----
-
-## 四、快捷键
-
-### 输入控制
-
-| 快捷键 | 说明 |
-|--------|------|
-| `Enter` | 发送消息 |
-| `Shift + Enter` | 换行（多行输入） |
-| `Escape` | 取消当前输入 / 中断当前操作 |
-| `Ctrl + C` | 中断当前操作 |
-| `Ctrl + D` | 退出 Claude Code（等同于 `/quit`） |
-| `↑` / `↓` | 浏览输入历史 |
-| `Tab` | 自动补全文件名和命令 |
-
-### 权限提示时
-
-| 快捷键 | 说明 |
-|--------|------|
-| `y` | 允许本次操作 |
-| `n` | 拒绝本次操作 |
-| `a` | 本次会话始终允许此类操作 |
-
----
-
-## 五、权限模式
-
-Claude Code 有三种权限模式控制工具使用：
-
-| 模式 | 说明 |
-|------|------|
-| **Default（默认）** | 读取操作自动允许，写入/执行操作每次询问 |
-| **Plan（计划）** | 只读模式，Claude 只能分析和提建议，不能修改文件 |
-| **Auto-accept（自动接受）** | 自动批准所有操作（谨慎使用） |
-
-### 权限配置文件
-
-可在 `settings.json` 中配置允许/拒绝的工具列表：
-```json
-{
-  "permissions": {
-    "allow": ["Bash(npm test)", "Bash(npm run build)"],
-    "deny": ["Bash(rm -rf)"]
-  }
-}
-```
-
----
-
-## 六、上下文引用（IDE 扩展中）
-
-在 VS Code / JetBrains 扩展中，可使用 `#` 引用上下文：
-
-| 引用 | 说明 |
-|------|------|
-| `#File` | 引用特定文件 |
-| `#Folder` | 引用特定文件夹 |
-| `#Codebase` | 扫描整个代码库（需要索引） |
-| `#Problems` | 查看当前文件的问题 / 诊断 |
-| `#Terminal` | 查看终端输出 |
-| `#Git Diff` | 查看 Git 差异 |
-
----
-
-## 七、终端中用户自行运行命令
-
-```
-! <command>
-```
-
-在 Claude Code 提示符中输入 `!` 前缀可直接运行 shell 命令，输出会直接进入对话上下文。
-- 适用于交互式操作（如 `! gcloud auth login`、`! docker login`）
-- 输出会成为后续对话的上下文
-
----
-
-## 八、配置体系
-
-### 配置文件层级（优先级从高到低）
-
-| 位置 | 作用域 | 文件 |
-|------|--------|------|
-| `<项目>/.claude/settings.json` | 项目级（提交到 Git） | 团队共享配置 |
-| `<项目>/.claude/settings.local.json` | 项目级（不提交） | 个人项目配置 |
-| `~/.claude/settings.json` | 用户级 | 全局配置 |
-
-### CLAUDE.md 系统
-
-CLAUDE.md 是项目级的指导文件，Claude 会自动读取：
-
-| 位置 | 说明 |
-|------|------|
-| `项目根目录/CLAUDE.md` | 整个项目的指导规则 |
-| `子目录/CLAUDE.md` | 该目录及子目录的特定规则 |
-| `~/.claude/CLAUDE.md` | 全局规则（所有项目生效） |
-
-典型内容包括：
-- 项目结构说明
-- 编码规范和风格要求
-- 构建/测试/部署命令
-- 技术栈说明
-- 常见注意事项
-
-### 记忆系统
-
-记忆文件存储在 `~/.claude/projects/<项目>/memory/` 目录下：
-
-| 记忆类型 | 说明 |
-|----------|------|
-| `user` | 用户角色、偏好、知识背景 |
-| `feedback` | 用户对工作方式的反馈和指导 |
-| `project` | 项目目标、进展、决策 |
-| `reference` | 外部系统资源、URL、工单 |
-
-记忆会在未来对话中自动加载。
-
----
-
-## 九、MCP（Model Context Protocol）
-
-MCP 允许 Claude Code 连接外部工具和数据源。
-
-### 配置方式
-
-**CLI 方式：**
-
+### Linux / macOS (`~/.zshrc` 或 `~/.bashrc`)
 ```bash
-claude mcp add <name> <command> [args...]      # 添加 MCP 服务器
-claude mcp add <name> -s user <command>         # 添加到用户级（全局）
-claude mcp remove <name>                        # 移除 MCP 服务器
-claude mcp list                                 # 列出已配置的服务器
-```
-
-**配置文件方式：**
-
-项目级：`.claude/settings.json`
-用户级：`~/.claude/settings.json`
-
-```json
-{
-  "mcpServers": {
-    "server-name": {
-      "command": "npx",
-      "args": ["-y", "@some/mcp-server"],
-      "env": {
-        "API_KEY": "your-key"
-      }
-    }
-  }
-}
-```
-
----
-
-## 十、Hooks（钩子系统）
-
-Hooks 是在特定事件触发时自动执行的命令，配置在 `settings.json` 中：
-
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": ["echo 'About to run bash command'"]
-      }
-    ],
-    "PostToolUse": [
-      {
-        "matcher": "Write",
-        "hooks": ["npx prettier --write $CLAUDE_FILE_PATH"]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "",
-        "hooks": ["notify-send 'Claude' '$CLAUDE_NOTIFICATION'"]
-      }
-    ]
-  }
-}
-```
-
-### 可用的 Hook 事件
-
-| 事件 | 触发时机 |
-|------|----------|
-| `PreToolUse` | 工具调用之前 |
-| `PostToolUse` | 工具调用之后 |
-| `Notification` | 发送通知时 |
-| `Stop` | Claude 停止响应时 |
-
-### Hook 环境变量
-
-| 变量 | 说明 |
-|------|------|
-| `$CLAUDE_FILE_PATH` | 当前操作的文件路径 |
-| `$CLAUDE_TOOL_NAME` | 工具名称 |
-| `$CLAUDE_NOTIFICATION` | 通知消息内容 |
-
----
-
-## 十一、Agent 类型
-
-在多代理工作流中，可使用以下 Agent 类型：
-
-| 类型 | 说明 |
-|------|------|
-| `claude` | 通用代理，适合不属于其他特定类型的任务 |
-| `claude-code-guide` | 专门回答 Claude Code / SDK / API 使用问题 |
-| `Explore` | 只读搜索代理，适合大范围代码搜索 |
-| `general-purpose` | 通用代理，搜索代码和执行多步骤任务 |
-| `Plan` | 软件架构师代理，设计实现方案 |
-| `code-reviewer` | 代码审查代理 |
-
----
-
-## 十二、Worktree（工作树）
-
-工作树允许在隔离的 Git 环境中工作：
-
-```
-请在工作树中工作 / use a worktree
-```
-
-- 自动创建 `.claude/worktrees/` 下的独立分支
-- 工作完成后可选择保留或删除
-- 适合并行开发、测试危险操作
-
----
-
-## 十三、环境变量
-
-### 认证相关
-
-| 变量 | 说明 |
-|------|------|
-| `ANTHROPIC_API_KEY` | Anthropic API 密钥 |
-| `ANTHROPIC_AUTH_TOKEN` | 认证令牌（中转站常用） |
-| `ANTHROPIC_BASE_URL` | API 基础 URL（中转站/代理地址） |
-
-### 行为控制
-
-| 变量 | 说明 |
-|------|------|
-| `CLAUDE_CODE_MAX_TURNS` | 限制非交互模式下的最大对话轮数 |
-| `CLAUDE_CODE_USE_BEDROCK` | 使用 AWS Bedrock（值为 `1`） |
-| `CLAUDE_CODE_USE_VERTEX` | 使用 Google Vertex AI（值为 `1`） |
-| `CLAUDE_MODEL` | 覆盖默认模型 |
-| `DISABLE_PROMPT_CACHING` | 禁用提示缓存 |
-| `HTTP_PROXY` / `HTTPS_PROXY` | HTTP/HTTPS 代理设置 |
-
-### 中转站 / 第三方配置示例
-
-```bash
-# Linux / macOS
 export ANTHROPIC_AUTH_TOKEN="你的API密钥"
-export ANTHROPIC_BASE_URL="https://your-proxy.com"
-
-# 写入配置文件使其永久生效
-echo 'export ANTHROPIC_AUTH_TOKEN="你的API密钥"' >> ~/.zshrc
-echo 'export ANTHROPIC_BASE_URL="base-url"' >> ~/.zshrc
-source ~/.zshrc
+export ANTHROPIC_BASE_URL="https://your-proxy-domain.com"
 ```
 
+### Windows PowerShell
 ```powershell
-# Windows PowerShell
 $env:ANTHROPIC_AUTH_TOKEN = "你的API密钥"
-$env:ANTHROPIC_BASE_URL = "https://your-proxy.com"
+$env:ANTHROPIC_BASE_URL = "https://your-proxy-domain.com"
 
-# 永久设置（用户级）
+# 永久写入系统用户变量
 [Environment]::SetEnvironmentVariable("ANTHROPIC_AUTH_TOKEN", "你的API密钥", "User")
-[Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "base-url", "User")
+[Environment]::SetEnvironmentVariable("ANTHROPIC_BASE_URL", "https://your-proxy-domain.com", "User")
 ```
-
----
-
-## 十四、模型信息
-
-### 最新可用模型（2026年7月）
-
-| 模型 | Model ID | 定位 |
-|------|----------|------|
-| Claude Fable 5 | `claude-fable-5` | Claude 5 系列 |
-| Claude Opus 4.8 | `claude-opus-4-8` | 最强大的推理模型（1M 上下文） |
-| Claude Sonnet 5 | `claude-sonnet-5` | 平衡性能与速度 |
-| Claude Haiku 4.5 | `claude-haiku-4-5-20251001` | 最快速、最经济 |
-
-- 知识截止日期：2026年1月
-- 构建 AI 应用时建议默认使用最新最强的 Claude 模型
-- Fast 模式在 Opus 4.8/4.7 上可用（同模型更快输出，不降级）
-
----
-
-## 十五、可用平台
-
-| 平台 | 说明 |
-|------|------|
-| **CLI（命令行）** | `npm install -g @anthropic-ai/claude-code` |
-| **桌面应用** | Mac / Windows 原生应用 |
-| **Web 应用** | [claude.ai/code](https://claude.ai/code) |
-| **VS Code 扩展** | 在 VS Code 中集成使用 |
-| **JetBrains 扩展** | 在 IntelliJ / WebStorm 等 IDE 中使用 |
-
----
-
-## 十六、实用技巧
-
-### 多行输入
-- `Shift + Enter` 换行
-- 支持粘贴多行文本
-
-### 管道输入
-```bash
-cat error.log | claude -p "分析这个错误日志"
-git diff | claude -p "审查这些代码变更"
-echo "解释这段代码" | claude
-```
-
-### 与 Git 配合
-```bash
-# 让 Claude 基于 diff 生成提交信息
-git diff --staged | claude -p "为这些更改生成一个中文 commit message"
-```
-
-### 图片输入
-Claude Code 支持直接读取图片文件（PNG、JPG 等）并进行视觉分析。
-
-### PDF 输入
-支持读取 PDF 文件，可指定页码范围（如 `1-5`，每次最多 20 页）。
-
----
-
-## 十七、常用工作流示例
-
-### 1. 新项目初始化
-```
-/init                     # 生成 CLAUDE.md
-```
-
-### 2. 代码审查流程
-```
-/code-review              # 审查当前 diff
-/code-review --fix        # 审查并自动修复
-/code-review --comment    # 审查并发布 PR 评论
-/security-review          # 安全审查
-```
-
-### 3. 深度研究
-```
-/deep-research 某个技术主题的深入分析
-```
-
-### 4. 前端开发
-```
-/frontend-design          # 创建前端界面
-/dataviz                  # 数据可视化
-```
-
-### 5. 查看费用
-```
-/cost                     # 查看当前会话消耗
-```
-
----
-
-## 十八、问题排查
-
-```bash
-claude doctor             # 诊断安装和配置问题
-claude --verbose          # 启用详细日志
-```
-
-### 常见问题
-
-- **权限提示太多**：使用 `/fewer-permission-prompts` 或在 settings.json 中配置 allow 列表
-- **上下文太长**：使用 `/compact` 压缩对话历史
-- **模型响应慢**：使用 `/fast` 启用快速模式
-- **连接问题**：检查 `ANTHROPIC_BASE_URL` 和代理设置
-
----
-
-## 反馈与帮助
-
-- GitHub Issues：https://github.com/anthropics/claude-code/issues
-- 官方文档：https://docs.anthropic.com/en/docs/claude-code
