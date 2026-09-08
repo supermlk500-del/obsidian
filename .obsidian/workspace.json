@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "fabfafe1b8f1f2d8",
+        "id": "ccf13c1d1499aa5c",
         "type": "tabs",
         "children": [
           {
-            "id": "dfa6ce5308d38169",
+            "id": "cabb0dbc21f75f9d",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "ai/Claude命令大全.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Claude命令大全"
+              "title": "新标签页"
             }
           }
         ]
@@ -55,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "taskk",
+                "query": "ccu",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -80,7 +76,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 264.5
   },
   "right": {
     "id": "2d8bf2dce34b5bb2",
@@ -144,7 +140,6 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "ai/Claude命令大全.md",
                 "followCursor": true,
                 "showSearch": true,
                 "searchQuery": ""
@@ -183,14 +178,32 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "dfa6ce5308d38169",
+  "active": "5c846eb791d15139",
   "lastOpenFiles": [
-    "deep-research-report.md",
-    "forruankao/day01",
-    "forruankao/deep-research-report.md",
-    "forruankao/DAILY_STUDY_PLAN.md",
-    "forruankao",
+    "forruankao/软考笔记.md",
+    "forruankao/软考笔记.md.tmp.34040.1488c01c903c",
+    "forruankao/软考笔记.md.tmp.10272.67fb9c0a3089",
     "ai/Claude命令大全.md",
+    "forruankao/软考笔记.md.tmp.10272.5bec70dbad12",
+    "forruankao/软考笔记.md.tmp.10272.05746f95399b",
+    "forruankao/软考笔记.md.tmp.10272.734d1a38eede",
+    "forruankao/软考笔记.md.tmp.10272.b46decb99e72",
+    "forruankao/软考笔记.md.tmp.10272.45a5b9664d11",
+    "forruankao/软考笔记.md.tmp.29476.af47128c8796",
+    "forruankao/软考笔记.md.tmp.29476.8ac285f5a3f2",
+    "forruankao/软考笔记.md.tmp.29476.62443b044dc2",
+    "forruankao/2026下半年软件设计师48天｜博学谷视频+刷题+案例最终执行手册.md",
+    "forruankao/2026下半年软件设计师48天_博学谷视频刷题案例最终执行手册_修订版.md",
+    "images/16-submit-callback-url.png.md",
+    "forruankao/images/一条指令的执行过程.png",
+    "forruankao/day01/未命名.md",
+    "forruankao/images/CPU主存系统总线结构图.png",
+    "forruankao/day01/day01.md",
+    "forruankao/day01/Day01-软考框架与计组基础-DFD图元.md",
+    "forruankao/2026下半年软件设计师中级机考48天视频+刷题+案例一体化备考执行手册.md",
+    "forruankao/DAILY_STUDY_PLAN.md",
+    "forruankao/deep-research-report.md",
+    "deep-research-report.md",
     "测试/测试工具/jenkins.md",
     "测试/测试工具/images/jenkins-installed-current.png",
     "测试/测试工具/images/jenkins-http-proxy-current.png",
@@ -200,36 +213,16 @@
     "测试/测试工具/images/jenkins-manage-褰撳墠瀹炴櫙.png",
     "测试/测试工具/images/jenkins-workspace-褰撳墠瀹炴櫙.png",
     "测试/测试工具/images/jenkins-tools-current.png",
-    "测试/测试工具/images/jenkins-system-current.png",
-    "测试/测试工具/images/jenkins-plugins-current.png",
-    "测试/测试工具/jenkins_capture_loggedin.ps1",
-    "测试/测试工具/jenkins_capture.py",
-    "测试/测试工具/jenkins-login.html",
     "测试/测试工具/prometheus + Grafana.md",
     "测试/自动化.md",
     "ai/Codex命令大全.md",
-    "ai/Codex命令大全.md.tmp.7428.d865f096ee13",
-    "ai/Codex命令大全.md.tmp.1904.28d8860dacc9",
     "ai/Opencode命令大全.md",
     "测试/测试工具/JMeter实战（一）——织慧通完整业务链与数据清理.md",
     "ai/openclaw/OpenClaw.md",
     "java/javaEE/端口占用.md",
     "测试/测试工具/ADB.md",
-    "ai/Claude命令大全.md.tmp.10952.82a5c171248e",
-    "ai/Claude命令大全.md.tmp.10952.9d4fb18405c6",
-    "ai/Claude命令大全.md.tmp.31988.532297ddc85f",
     "ai/Gemini.md",
     "测试/测试工具/JMeter实战（二）——性能报告与Grafana指标解读.md",
-    "工具/WSL2_Docker_CPA_CPAMP_完整部署与踩坑笔记.md",
-    "工具/WSL2_Docker_CPA_CPAMP_部署笔记.md",
-    "ai/claude code.md",
-    "测试/性能测试.md",
-    "测试/面试（一般步骤，先从自己，再从外界，然后他人，最后集体）.md",
-    "工具/Docker.md",
-    "测试/测试工具/Monkey.md",
-    "测试/数据库笔记.md",
-    "project/mlkspace/MLK_Space_REST_API接口文档_学习版.md",
-    "测试/jenkins.md",
-    "工具/Git笔记.md"
+    "工具/WSL2_Docker_CPA_CPAMP_完整部署与踩坑笔记.md"
   ]
 }

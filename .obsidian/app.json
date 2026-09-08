@@ -9,5 +9,6 @@
   "alwaysUpdateLinks": true,
   "readableLineLength": true,
   "showLineNumber": true,
-  "promptDelete": true
+  "promptDelete": false,
+  "strictLineBreaks": false
 }
