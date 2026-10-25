@@ -4,17 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "ccf13c1d1499aa5c",
+        "id": "96887a611b953baa",
         "type": "tabs",
         "children": [
           {
-            "id": "cabb0dbc21f75f9d",
+            "id": "a3747c28862b17ef",
             "type": "leaf",
             "state": {
-              "type": "empty",
+              "type": "graph",
               "state": {},
-              "icon": "lucide-file",
-              "title": "新标签页"
+              "icon": "lucide-git-fork",
+              "title": "关系图谱"
             }
           }
         ]
@@ -51,7 +51,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "ccu",
+                "query": "打包",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -140,6 +140,7 @@
             "state": {
               "type": "outline",
               "state": {
+                "file": "开题答辩演讲逐字稿_功能与创新点核心版.md",
                 "followCursor": true,
                 "showSearch": true,
                 "searchQuery": ""
@@ -178,20 +179,27 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "5c846eb791d15139",
+  "active": "a3747c28862b17ef",
   "lastOpenFiles": [
+    "开题答辩-逐页讲解稿.md",
+    "开题答辩演讲逐字稿_功能与创新点核心版.md",
+    "开题答辩-高频问题与回答.md",
+    "开题答辩-演讲稿_5分钟练习版.md",
+    "forruankao/软考笔记.md.tmp.4088.3b865ac2093f",
+    "forruankao/软考笔记.md.tmp.4088.745d474e10cc",
+    "forruankao/软考笔记.md.tmp.4088.90827556b818",
+    "forruankao/软考笔记.md.tmp.4088.fcfb49506cf9",
+    "forruankao/软考笔记.md.tmp.4088.a4b6a3700717",
+    "forruankao/软考笔记.md.tmp.4088.eae73a7d96ed",
+    "forruankao/软考笔记.md.tmp.4088.268d9059c2d5",
+    "forruankao/软考笔记.md.tmp.4088.912ef8af577a",
+    "forruankao/软考笔记.md.tmp.4088.8bf68a5cae3b",
+    "forruankao/软考笔记.md.tmp.4088.196e8d151cf2",
     "forruankao/软考笔记.md",
-    "forruankao/软考笔记.md.tmp.34040.1488c01c903c",
-    "forruankao/软考笔记.md.tmp.10272.67fb9c0a3089",
+    "java/javaEE/打包.md",
+    "测试/测试理论.md",
+    "python/python扩展/表达式.md",
     "ai/Claude命令大全.md",
-    "forruankao/软考笔记.md.tmp.10272.5bec70dbad12",
-    "forruankao/软考笔记.md.tmp.10272.05746f95399b",
-    "forruankao/软考笔记.md.tmp.10272.734d1a38eede",
-    "forruankao/软考笔记.md.tmp.10272.b46decb99e72",
-    "forruankao/软考笔记.md.tmp.10272.45a5b9664d11",
-    "forruankao/软考笔记.md.tmp.29476.af47128c8796",
-    "forruankao/软考笔记.md.tmp.29476.8ac285f5a3f2",
-    "forruankao/软考笔记.md.tmp.29476.62443b044dc2",
     "forruankao/2026下半年软件设计师48天｜博学谷视频+刷题+案例最终执行手册.md",
     "forruankao/2026下半年软件设计师48天_博学谷视频刷题案例最终执行手册_修订版.md",
     "images/16-submit-callback-url.png.md",
@@ -218,11 +226,6 @@
     "ai/Codex命令大全.md",
     "ai/Opencode命令大全.md",
     "测试/测试工具/JMeter实战（一）——织慧通完整业务链与数据清理.md",
-    "ai/openclaw/OpenClaw.md",
-    "java/javaEE/端口占用.md",
-    "测试/测试工具/ADB.md",
-    "ai/Gemini.md",
-    "测试/测试工具/JMeter实战（二）——性能报告与Grafana指标解读.md",
-    "工具/WSL2_Docker_CPA_CPAMP_完整部署与踩坑笔记.md"
+    "ai/openclaw/OpenClaw.md"
   ]
 }
